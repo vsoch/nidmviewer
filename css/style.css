@@ -1,0 +1,87 @@
+body {
+  background-color:black;
+}
+.mrbox {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+#drop_zone {
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  font: 20pt bold 'Vollkorn';
+  color: #bbb;
+}
+#button_zone {
+  border: 2px solid #F7F7F7;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px 40px 55px 0px;
+  text-align: center;
+  font: 20pt bold 'Vollkorn';
+  color: #F7F7F7;
+  background-color: #F7F7F7;
+}
+.float-right-wrapper {
+  float: right;
+}
+.float-left-wrapper {
+  float:left;
+}
+.circle {
+  border-radius: 50px;
+}
+.thumb {
+  height: 75px;
+  border: 1px solid #000;
+  margin: 10px 5px 0 0;
+}
+output {
+  color: white
+}
+ul {
+  list-style: none
+}
+#error {
+  border-radius:2px;
+  background-color: skyblue;
+}
+
+/* Histogram 
+not included in current version
+*/
+
+#histy {
+
+}
+
+.bar rect {
+  fill: royalblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+#canvas {
+  border-radius:10px;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#papayaContainer0 {
+   padding-left:10px
+}
+
+#papayaToolbar0 {
+   background-color: #F7F7F7;
+}

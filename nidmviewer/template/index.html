@@ -1,0 +1,183 @@
+<html>
+<!-- Nifti File Reader, for Server
+   @vsoch, Poldracklab <3
+-->
+<head>
+    <title>NIDM Viewer</title>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/bootstrap.min.js"></script>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/d3.min.js"></script>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/script.js"></script>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/table.js"></script>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/scribl.min.js"></script>
+    <script src="http://rawgithub.com/vsoch/nidmviewer/js/bootstrap-table.js"></script>
+    <link href="http://rawgithub.com/vsoch/nidmviewer/css/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://rawgithub.com/vsoch/font-brain/master/font-brain/font-brain.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/papaya.css" /> <!--version=0.8&build=910-->
+    <script type="text/javascript" src="js/papaya.js"></script> <!--version=0.8&build=910,beta-->
+</head>
+
+<body>
+
+    <div class="row">
+
+            <!-- Buttons! -->
+            <div id="button_zone">
+
+                <div class="float-left-wrapper">
+
+                    <!-- NIDM Selection -->
+                    <button class="btn btn-default">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
+                                <ul class="dropdown-menu" id="nidm_selection">
+                                </ul>
+                        </li>
+                    </button>
+                </div>
+
+                <div class="float-right-wrapper">
+
+                    <!-- View image buttons will be appended here -->
+                    <span id="nidm_images">
+                    </span>
+
+                    <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
+                        <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
+                    </a>
+            </div>
+        </div>
+
+
+<div class="row">
+
+    <!-- Left sidebar region for tables -->
+    <div id="bluetable" class="col-md-6">
+
+        <!-- Tables for nidm will be dynamically rendered here -->
+        <div class="row" id="tablerow">
+        </div>
+    </div>
+
+    <!-- Papaya viewer window -->
+    <div id="pappy" class="col-md-6">
+
+    <script type="text/javascript" src="http://rawgithub.com/vsoch/nidmviewer/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="http://rawgithub.com/vsoch/nidmviewer/js/bootstrap.js"></script>
+    <script type="text/javascript" src="http://rawgithub.com/vsoch/nidmviewer/js/bootstrap-table.js"></script>
+    <script type="text/javascript">
+
+     var brain_images = [SUB_BRAINMAPS_SUB];
+     var peaks = [SUB_PEAKS_SUB];
+
+     var cx;
+     var params = [];
+     params["worldSpace"] = true;
+     params["expandable"] = false;
+     params["combineParametric"] = true;
+     params["showControls"] = false;
+     params["luts"] = [{"name":"PuBu", "data":[[0,1,0.968627,0.984314],[0.125,0.92549,0.905882,0.94902],[0.25,0.815686,0.819608,0.901961],[0.375,0.65098,0.741176,0.858824],[0.5,0.454902,0.662745,0.811765],[0.625,0.211765,0.564706,0.752941],[0.75,0.0196078,0.439216,0.690196],[0.875,0.0156863,0.352941,0.552941],[1,0.00784314,0.219608,0.345098]]},
+     {"name":"OrRd", "data":[[0,1,0.968627,0.92549],[0.125,0.996078,0.909804,0.784314],[0.25,0.992157,0.831373,0.619608],[0.375,0.992157,0.733333,0.517647],[0.5,0.988235,0.552941,0.34902],[0.625,0.937255,0.396078,0.282353],[0.75,0.843137,0.188235,0.121569],[0.875,0.701961,0,0],[1,0.498039,0,0]]}];
+     params["[SUB_BASEIMAGE_SUB]"] = {"parametric": true,  "min":0, "alpha":"0.75", "symmetric":true};
+     params["kioskMode"] = true;    
+
+
+// Function to add / remove image from viewer
+function viewimage(file) {
+
+     // Tag canvas, and show export button
+     $($("canvas")[0]).attr("id","papaya-canvas")
+     $("#export").show()
+
+     // Reset viewer and load new images
+     papayaContainers[0].viewer.resetViewer(0,params);
+     papayaContainers[0].toolbar.updateImageButtons();
+     papayaContainers[0].viewer.loadBaseImage(["[SUB_BASEIMAGE_SUB]"],true)
+     params[file] = {"parametric": true,  "min":0, "lut":"OrRd", "negative_lut":"PuBu", "alpha":"0.75", "symmetric":true};
+     setTimeout(function(){
+             papayaContainers[0].viewer.loadOverlay([file],true);
+     }, 500);
+       
+}
+
+</script>
+
+	<div class="papaya" data-params="params"></div>
+
+        <!-- View svg modal -->
+        <div class="modal" id="exportmodal">
+            <div class="modal-admin">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                        <h4 class="modal-title">Right click to Save As</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="svgexport"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+	
+        </div>
+    </div>     
+</div>
+
+
+    <script type="text/javascript">        
+            
+        $().ready(function(){
+
+	     // Generate initial table, and buttons for nidm
+	     nidm_files = []
+	     for (var nidm in peaks) {
+		 if (peaks.hasOwnProperty(nidm)) {
+		     nidm_files.push(nidm)
+                     console.log(nidm);
+                     $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+		 }
+	     }
+
+	     // Generate a table with the first nidm file     
+	     nidm_table(peaks[nidm_files[0]])
+
+             // Load first brain image into the viewer
+             load_images(brain_images[nidm_files[0]])
+             $('.dropdown-toggle').dropdown()
+
+         });
+
+        function operateFormatter(value, row, index) {
+            return [
+                //'<a rel="tooltip" title="Like" class="table-action like" href="javascript:void(0)" title="Like">',
+                //    '<i class="fa fa-heart"></i>',
+                //'</a>',
+                //'<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
+                //    '<i class="fa fa-edit"></i>',
+                //'</a>',
+                '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
+                    '<i class="fa fa-remove"></i>',
+                '</a>'
+            ].join('');
+        }
+       
+    </script>
+
+<script>
+$(function () {
+    $(".search").css("width","160px")
+    $('button[name=toggle]').css("height","40px")
+    $("#export").hide()
+    $("#export").css("margin-left",30)
+});
+</script>
+<link href="http://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet" type="text/css">
+<link href="http://rawgithub.com/vsoch/nidmviewer/css/style.css" rel="stylesheet" type="text/css">
+</body></html>
