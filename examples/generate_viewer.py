@@ -7,7 +7,7 @@ import os
 # HTML FOR EMBEDDING #####################################################
 # Here are images that we want to see, matches with nidm
 nidm_files = [os.path.abspath(f) for f in glob("fsl/*.ttl")]
-standard_brain = os.path.abspath("/fsl/MNI152_T1_2mm_brain.nii.gz")
+standard_brain = os.path.abspath("fsl/MNI152_T1_2mm_brain.nii.gz")
 
 # You can generate something to view in your browser
 # If no base_image is specified, the background will be black

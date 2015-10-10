@@ -9,9 +9,11 @@ NIDM Results Viewer
  - uses [font brain](http://vsoch.github.io/font-brain) for nidm and brain imaging icons
 
 
-###### Example
+###### Examples
 
+see [an example](examples/generate_viewer.py)
 
+###### Installation
 
 To install
 

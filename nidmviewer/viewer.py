@@ -68,10 +68,13 @@ def parse_nidm(nidm_files):
     maps = dict()
     for nidm_file in nidm_files:
         nidm_file = os.path.abspath(nidm_file)
-        results = getjson(nidm_file)
-        df,brainmaps = get_peaks_and_maps(results)
-        peaks[nidm_file] = df
-        maps[nidm_file] = brainmaps
+        try:
+            results = getjson(nidm_file)
+            df,brainmaps = get_peaks_and_maps(results)
+            peaks[nidm_file] = df
+            maps[nidm_file] = brainmaps
+        except 
+            print "Cannot parse %s, likely bad syntax." %(nidm_file)
     return peaks,maps
 
 """
