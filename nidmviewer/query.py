@@ -16,7 +16,7 @@ nidm.ttl file with nidmviewer.convert getjson() function
 def get_peaks_and_maps(results):
 
     # Here are the rdf keys we care about for a peak
-    keys = ["atLocation","value","pvalue_fwer","wasDerivedFrom"]
+    keys = ["atLocation","value","pvalue_fwer","pvalue_uncorrected","wasDerivedFrom","equivalent_zstatistic"]
     lookup = get_nidm_keys()
     peak = lookup["peak"]
     df = pandas.DataFrame(columns=keys)
@@ -41,7 +41,7 @@ def get_peaks_and_maps(results):
                         df.loc[peakid,key] = result[lookup[key]][0]["@id"].encode("utf-8")
         
         # Is it a coordinate?
-        if lookup["Location"] in result["@type"]:
+        if lookup["coordinate"] in result["@type"]:
             coord = result[lookup["coordinateVector"]][0]["@value"].encode("utf-8")
             coordinates[result["@id"]] = coord.strip("[").strip("]").split(",")
 
@@ -52,9 +52,15 @@ def get_peaks_and_maps(results):
                     brainmaps[result["@id"].encode("utf-8")] = result[lookup["atLocation"]][0]["@value"].encode("utf-8")
 
     # Match coordinateVectors to peaks
-    df["x"] = [int(coordinates[x][0]) for x in df["atLocation"].tolist()]
-    df["y"] = [int(coordinates[x][1]) for x in df["atLocation"].tolist()]
-    df["z"] = [int(coordinates[x][2]) for x in df["atLocation"].tolist()]
+    df["x"] = [float(coordinates[x][0]) for x in df["atLocation"].tolist()]
+    df["y"] = [float(coordinates[x][1]) for x in df["atLocation"].tolist()]
+    df["z"] = [float(coordinates[x][2]) for x in df["atLocation"].tolist()]
+
+    # Remove columns with all nan
+    for column in df.columns:
+        if df[df[column].isnull()].shape[0] == df.shape[0]:
+            df = df.drop(column,axis=1)
+
     return df,brainmaps
 
 

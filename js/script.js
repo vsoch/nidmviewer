@@ -43,16 +43,11 @@ function load_images(brainmaps){
         image_file = image_files[i] 
         image_name = image_names[i]
         // Make the active image selected
-        var image_pretty_name = image_name.replace("_"," ").replace("_id","").replace("_"," ").replace("_"," ")
-        if (image_name == "statistic_map_id") {
-            $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-primary circle' id='" + image_name +"' active>" +  image_pretty_name + "</button>")
-        } else {
-            $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-primary circle' id='" + image_name +"'>" + image_pretty_name + "</button>")
-        }
+        $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-primary circle' id='" + image_name +"'>IMAGE " + i + "</button>")
     }
 
-    // Load the statistic map
-    file = image_files[image_names.indexOf("statistic_map_id")]
+    // Load the first map, whatever it is
+    file = image_files[0]
     setTimeout(function(){
         viewimage(file)
     },500);
