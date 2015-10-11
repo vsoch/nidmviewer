@@ -1,0 +1,183 @@
+<html>
+<!-- Nifti File Reader, for Server
+   @vsoch, Poldracklab <3
+-->
+<head>
+    <title>NIDM Viewer</title>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/bootstrap.min.css">
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.min.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/d3.min.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/script.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/table.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/scribl.min.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
+    <link href="https://rawgithub.com/vsoch/nidmviewer/master/css/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://rawgithub.com/vsoch/font-brain/master/font-brain/font-brain.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/papaya.css" /> <!--version=0.8&build=910-->
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/papaya.js"></script> <!--version=0.8&build=910,beta-->
+</head>
+
+<body>
+
+    <div class="row">
+
+            <!-- Buttons! -->
+            <div id="button_zone">
+
+                <div class="float-left-wrapper">
+
+                    <!-- NIDM Selection -->
+                    <button class="btn btn-default">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
+                                <ul class="dropdown-menu" id="nidm_selection">
+                                </ul>
+                        </li>
+                    </button>
+                </div>
+
+                <div class="float-right-wrapper">
+
+                    <!-- View image buttons will be appended here -->
+                    <span id="nidm_images">
+                    </span>
+
+                    <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
+                        <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
+                    </a>
+            </div>
+        </div>
+
+
+<div class="row">
+
+    <!-- Left sidebar region for tables -->
+    <div id="bluetable" class="col-md-6">
+
+        <!-- Tables for nidm will be dynamically rendered here -->
+        <div class="row" id="tablerow">
+        </div>
+    </div>
+
+    <!-- Papaya viewer window -->
+    <div id="pappy" class="col-md-6">
+
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
+    <script type="text/javascript">
+
+     var brain_images = {'fsl/nidm.ttl': {'cluster_label_map_id': 'file://./fsl/ClusterLabels.nii.gz', 'contrast_standard_error_map_id': 'file://./fsl/ContrastStandardError.nii.gz', 'grand_mean_map_id': 'file://./fsl/GrandMean.nii.gz', 'resels_per_voxel_map_id': 'file://./fsl/ReselsPerVoxel.nii.gz', 'mask_id_1': 'file://./fsl/Mask.nii.gz', 'excursion_set_map_id': 'file://./fsl/ExcursionSet.nii.gz', 'contrast_map_id': 'file://./fsl/Contrast.nii.gz', 'residual_mean_squares_map_id': 'file://./fsl/ResidualMeanSquares.nii.gz', 'statistic_map_id': 'file://./fsl/TStatistic.nii.gz'}};
+     var peaks = {'fsl/nidm.ttl': [{'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0027', 'pvalue_fwer': '0.999999700966', 'value': '3.99446845055', 'y': -2, 'atLocation': 'http://iri.nidash.org/coordinate_0027', 'x': 38, 'z': 18}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0016', 'pvalue_fwer': '0.999986015427', 'value': '4.21700668335', 'y': 28, 'atLocation': 'http://iri.nidash.org/coordinate_0016', 'x': 32, 'z': -16}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0017', 'pvalue_fwer': '0.999994411515', 'value': '4.15797328949', 'y': -32, 'atLocation': 'http://iri.nidash.org/coordinate_0017', 'x': -2, 'z': 0}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0014', 'pvalue_fwer': '0.999927165976', 'value': '4.33599424362', 'y': 34, 'atLocation': 'http://iri.nidash.org/coordinate_0014', 'x': 22, 'z': 54}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0015', 'pvalue_fwer': '0.999983640577', 'value': '4.22756290436', 'y': -60, 'atLocation': 'http://iri.nidash.org/coordinate_0015', 'x': -42, 'z': 40}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0012', 'pvalue_fwer': '0.999850643034', 'value': '4.39413118362', 'y': 40, 'atLocation': 'http://iri.nidash.org/coordinate_0012', 'x': -2, 'z': 16}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0013', 'pvalue_fwer': '0.999887118617', 'value': '4.3709359169', 'y': 0, 'atLocation': 'http://iri.nidash.org/coordinate_0013', 'x': -6, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0010', 'pvalue_fwer': '0.999660110567', 'value': '4.46664333344', 'y': -12, 'atLocation': 'http://iri.nidash.org/coordinate_0010', 'x': -6, 'z': 14}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0011', 'pvalue_fwer': '0.999842069521', 'value': '4.3988404274', 'y': -38, 'atLocation': 'http://iri.nidash.org/coordinate_0011', 'x': -10, 'z': 0}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0018', 'pvalue_fwer': '0.999995070118', 'value': '4.15023708344', 'y': -30, 'atLocation': 'http://iri.nidash.org/coordinate_0018', 'x': -20, 'z': -4}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0019', 'pvalue_fwer': '0.999995410755', 'value': '4.14585351944', 'y': 40, 'atLocation': 'http://iri.nidash.org/coordinate_0019', 'x': 4, 'z': -4}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0022', 'pvalue_fwer': '0.999998718795', 'value': '4.07154893875', 'y': 8, 'atLocation': 'http://iri.nidash.org/coordinate_0022', 'x': 56, 'z': -14}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0028', 'pvalue_fwer': '0.999999966564', 'value': '3.89064717293', 'y': 32, 'atLocation': 'http://iri.nidash.org/coordinate_0028', 'x': -6, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0026', 'pvalue_fwer': '0.999999629081', 'value': '4.0054268837', 'y': 48, 'atLocation': 'http://iri.nidash.org/coordinate_0026', 'x': 38, 'z': 12}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0025', 'pvalue_fwer': '0.999999578783', 'value': '4.01196575165', 'y': -60, 'atLocation': 'http://iri.nidash.org/coordinate_0025', 'x': 0, 'z': -26}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0024', 'pvalue_fwer': '0.99999949162', 'value': '4.02173519135', 'y': 30, 'atLocation': 'http://iri.nidash.org/coordinate_0024', 'x': -2, 'z': -14}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0023', 'pvalue_fwer': '0.999999365423', 'value': '4.03340625763', 'y': 42, 'atLocation': 'http://iri.nidash.org/coordinate_0023', 'x': -14, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0021', 'pvalue_fwer': '0.999997992263', 'value': '4.09692430496', 'y': -50, 'atLocation': 'http://iri.nidash.org/coordinate_0021', 'x': -60, 'z': 22}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0020', 'pvalue_fwer': '0.999997579951', 'value': '4.10771799088', 'y': 50, 'atLocation': 'http://iri.nidash.org/coordinate_0020', 'x': 42, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0034', 'pvalue_fwer': '0.999999998453', 'value': '3.76388978958', 'y': 34, 'atLocation': 'http://iri.nidash.org/coordinate_0034', 'x': -8, 'z': 10}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0030', 'pvalue_fwer': '0.999999991888', 'value': '3.8298561573', 'y': -48, 'atLocation': 'http://iri.nidash.org/coordinate_0030', 'x': 14, 'z': -28}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0031', 'pvalue_fwer': '0.999999996784', 'value': '3.79239344597', 'y': 40, 'atLocation': 'http://iri.nidash.org/coordinate_0031', 'x': 40, 'z': 16}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0032', 'pvalue_fwer': '0.999999997601', 'value': '3.78086161613', 'y': 18, 'atLocation': 'http://iri.nidash.org/coordinate_0032', 'x': -48, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0033', 'pvalue_fwer': '0.999999997631', 'value': '3.78037238121', 'y': -2, 'atLocation': 'http://iri.nidash.org/coordinate_0033', 'x': -28, 'z': 38}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0029', 'pvalue_fwer': '0.999999978042', 'value': '3.87213277817', 'y': 26, 'atLocation': 'http://iri.nidash.org/coordinate_0029', 'x': 0, 'z': -14}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0001', 'pvalue_fwer': '0.149866252182', 'value': '7.43256521225', 'y': -94, 'atLocation': 'http://iri.nidash.org/coordinate_0001', 'x': -24, 'z': 0}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0003', 'pvalue_fwer': '0.963330950594', 'value': '5.11549425125', 'y': -22, 'atLocation': 'http://iri.nidash.org/coordinate_0003', 'x': -36, 'z': 46}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0002', 'pvalue_fwer': '0.238202216142', 'value': '7.01486539841', 'y': -88, 'atLocation': 'http://iri.nidash.org/coordinate_0002', 'x': 26, 'z': -2}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0005', 'pvalue_fwer': '0.990131419526', 'value': '4.86979961395', 'y': -70, 'atLocation': 'http://iri.nidash.org/coordinate_0005', 'x': -38, 'z': -16}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0004', 'pvalue_fwer': '0.987888015366', 'value': '4.90312004089', 'y': 54, 'atLocation': 'http://iri.nidash.org/coordinate_0004', 'x': -12, 'z': -2}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0007', 'pvalue_fwer': '0.993108930609', 'value': '4.81479454041', 'y': 52, 'atLocation': 'http://iri.nidash.org/coordinate_0007', 'x': -36, 'z': -6}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0006', 'pvalue_fwer': '0.991103805578', 'value': '4.85348510742', 'y': 6, 'atLocation': 'http://iri.nidash.org/coordinate_0006', 'x': -4, 'z': 2}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0009', 'pvalue_fwer': '0.999579544953', 'value': '4.48658800125', 'y': 30, 'atLocation': 'http://iri.nidash.org/coordinate_0009', 'x': 38, 'z': 2}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0008', 'pvalue_fwer': '0.998863863089', 'value': '4.58750295639', 'y': -60, 'atLocation': 'http://iri.nidash.org/coordinate_0008', 'x': -50, 'z': 50}, {'wasDerivedFrom': 'http://iri.nidash.org/significant_cluster_0035', 'pvalue_fwer': '0.999999998679', 'value': '3.75784039497', 'y': 30, 'atLocation': 'http://iri.nidash.org/coordinate_0035', 'x': -4, 'z': -4}]};
+
+     var cx;
+     var params = [];
+     params["worldSpace"] = true;
+     params["expandable"] = false;
+     params["combineParametric"] = true;
+     params["showControls"] = false;
+     params["luts"] = [{"name":"PuBu", "data":[[0,1,0.968627,0.984314],[0.125,0.92549,0.905882,0.94902],[0.25,0.815686,0.819608,0.901961],[0.375,0.65098,0.741176,0.858824],[0.5,0.454902,0.662745,0.811765],[0.625,0.211765,0.564706,0.752941],[0.75,0.0196078,0.439216,0.690196],[0.875,0.0156863,0.352941,0.552941],[1,0.00784314,0.219608,0.345098]]},
+     {"name":"OrRd", "data":[[0,1,0.968627,0.92549],[0.125,0.996078,0.909804,0.784314],[0.25,0.992157,0.831373,0.619608],[0.375,0.992157,0.733333,0.517647],[0.5,0.988235,0.552941,0.34902],[0.625,0.937255,0.396078,0.282353],[0.75,0.843137,0.188235,0.121569],[0.875,0.701961,0,0],[1,0.498039,0,0]]}];
+     params["fsl/MNI152_T1_2mm_brain.nii.gz"] = {"parametric": true,  "min":0, "alpha":"0.75", "symmetric":true};
+     params["kioskMode"] = true;    
+
+
+// Function to add / remove image from viewer
+function viewimage(file) {
+
+     // Tag canvas, and show export button
+     $($("canvas")[0]).attr("id","papaya-canvas")
+     $("#export").show()
+
+     // Reset viewer and load new images
+     papayaContainers[0].viewer.resetViewer(0,params);
+     papayaContainers[0].toolbar.updateImageButtons();
+     papayaContainers[0].viewer.loadBaseImage(["fsl/MNI152_T1_2mm_brain.nii.gz"],true)
+     params[file] = {"parametric": true,  "min":0, "lut":"OrRd", "negative_lut":"PuBu", "alpha":"0.75", "symmetric":true};
+     setTimeout(function(){
+             papayaContainers[0].viewer.loadOverlay([file],true);
+     }, 500);
+       
+}
+
+</script>
+
+	<div class="papaya" data-params="params"></div>
+
+        <!-- View svg modal -->
+        <div class="modal" id="exportmodal">
+            <div class="modal-admin">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                        <h4 class="modal-title">Right click to Save As</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="svgexport"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+	
+        </div>
+    </div>     
+</div>
+
+
+    <script type="text/javascript">        
+            
+        $().ready(function(){
+
+	     // Generate initial table, and buttons for nidm
+	     nidm_files = []
+	     for (var nidm in peaks) {
+		 if (peaks.hasOwnProperty(nidm)) {
+		     nidm_files.push(nidm)
+                     console.log(nidm);
+                     $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+		 }
+	     }
+
+	     // Generate a table with the first nidm file     
+	     nidm_table(peaks[nidm_files[0]])
+
+             // Load first brain image into the viewer
+             load_images(brain_images[nidm_files[0]])
+             $('.dropdown-toggle').dropdown()
+
+         });
+
+        function operateFormatter(value, row, index) {
+            return [
+                //'<a rel="tooltip" title="Like" class="table-action like" href="javascript:void(0)" title="Like">',
+                //    '<i class="fa fa-heart"></i>',
+                //'</a>',
+                //'<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
+                //    '<i class="fa fa-edit"></i>',
+                //'</a>',
+                '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
+                    '<i class="fa fa-remove"></i>',
+                '</a>'
+            ].join('');
+        }
+       
+    </script>
+
+<script>
+$(function () {
+    $(".search").css("width","160px")
+    $('button[name=toggle]').css("height","40px")
+    $("#export").hide()
+    $("#export").css("margin-left",30)
+});
+</script>
+<link href="http://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet" type="text/css">
+<link href="https://rawgithub.com/vsoch/nidmviewer/master/css/style.css" rel="stylesheet" type="text/css">
+</body></html>

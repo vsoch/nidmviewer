@@ -73,7 +73,7 @@ def parse_nidm(nidm_files):
             df,brainmaps = get_peaks_and_maps(results)
             peaks[nidm_file] = df
             maps[nidm_file] = brainmaps
-        except 
+        except:
             print "Cannot parse %s, likely bad syntax." %(nidm_file)
     return peaks,maps
 
