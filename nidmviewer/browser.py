@@ -1,9 +1,9 @@
 '''
-browser.py: part of niftidrop package
+browser.py: part of nidmviewer package
 Functions to visualize in browser
 
 '''
-from niftidrop.utils import make_tmp_folder
+from nidmviewer.utils import make_tmp_folder
 import SimpleHTTPServer
 import SocketServer
 import webbrowser

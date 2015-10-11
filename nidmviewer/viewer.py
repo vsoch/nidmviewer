@@ -19,12 +19,12 @@ nidm_files: one or more nidm files to add to the viewer. Images in the files sho
       at the specified URL. 
 retrieve: If set to False, the images are assumed to be on the same server, and will be 
           served with the given URL. If retrieve is set to True, the images will be retrieved
-          first and stored in a temstporary directory. [NOT YET IMPLEMENTED]
+          first and stored in a temporary directory.
 base_image: The base image to use for the viewer. Not specifying a base_image will
             yield a black background.
 view_in_browser: open a temporary web browser (to run locally). If True, images will be copied
       to a temp folder. If False, image_paths must be relative to web server. File names 
-      should be unique. [NOT YET IMPLEMENTED]
+      should be unique.
 
 """
 def generate(nidm_files,base_image="",retrieve=False,view_in_browser=False,template_choice="index"):
