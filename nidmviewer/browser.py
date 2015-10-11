@@ -19,10 +19,9 @@ copy_list is a dictionary,
 def view(html_snippet,copy_list):
     with make_tmp_folder() as tmp_dir:  
         # First copy all brain maps
-        for nidm,maplist in copy_list.iteritems():
-            for real_path,temp_path in maplist.iteritems():
-                real_path = os.path.abspath(real_path.replace("file://",""))
-                shutil.copy(real_path,"%s/%s" %(tmp_dir,temp_path))
+        for real_path,temp_path in copy_list.iteritems():
+            real_path = os.path.abspath(real_path.replace("file://",""))
+            shutil.copy(real_path,"%s/%s" %(tmp_dir,temp_path))
         # Now write template to temporary file
         tmp_file = "%s/pycompare.html" %(tmp_dir)
         # Change directory and start a web server

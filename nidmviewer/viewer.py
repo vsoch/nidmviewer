@@ -115,17 +115,19 @@ def generate_temp(nifti_files):
     new_nifti_files = dict()
     copy_list = dict()
     for nidm_file,maplist in nifti_files.iteritems():
+        nidm_directory = os.path.dirname(nidm_file)
         single_maps = dict()
         for brainmap_id,brainmap in maplist.iteritems():
+            brainmap_base = os.path.basename(brainmap)
             image_ext = get_extension(brainmap)
             temp_path = get_random_name()
             temp_image_path = "%s.%s" %(temp_path,image_ext)
             single_maps[strip_url(brainmap_id)] = temp_image_path
-            copy_list[brainmap] = temp_image_path
+            copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
         new_nifti_files[nidm_file] = single_maps
     return new_nifti_files,copy_list      
 
 
 # Now sure if we will need this
 def get_bootstrap():
-    return ['<script src="https://rawgit.com/vsoch/nifti-drop/master/js/jquery-2.1.4.min.js"></script>','<link rel="stylesheet" type="text/css" href="https://rawgit.com/vsoch/nifti-drop/master/css/bootstrap.min.css">','<script src="https://rawgit.com/vsoch/nifti-drop/master/js/bootstrap.min.js"></script>']
+    return ['<script src="https://rawgit.com/vsoch/nidmviewer/master/js/jquery-2.1.4.min.js"></script>','<link rel="stylesheet" type="text/css" href="https://rawgit.com/vsoch/nidmviewer/master/css/bootstrap.min.css">','<script src="https://rawgit.com/vsoch/nidmviewer/master/js/bootstrap.min.js"></script>']
