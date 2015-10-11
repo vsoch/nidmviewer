@@ -4,6 +4,12 @@ from nidmviewer.viewer import generate
 from glob import glob
 import os
 
+# These examples are for running the viewer from within python. You can achieve
+# the local browser version by running from the command line:
+
+# nidmviewer --ttl fsl/nidm.ttl
+# nidmviewer --ttl fsl/nidm1.ttl,nidm2.ttl
+
 # HTML FOR EMBEDDING #####################################################
 # Here are images that we want to see, these should be relative to your web server
 # Each ttl file must be matched with a provn file, in the case of different versions

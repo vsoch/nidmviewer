@@ -43,7 +43,7 @@ function load_images(brainmaps){
         image_file = image_files[i] 
         image_name = image_names[i]
         // Make the active image selected
-        $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-primary circle' id='" + image_name +"'>IMAGE " + i + "</button>")
+        $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-image btn-primary circle' id='" + image_name +"' title='" + image_name + "' alt='" + image_name + "'>" + image_name + "</button>")
     }
 
     // Load the first map, whatever it is
