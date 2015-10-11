@@ -7,6 +7,8 @@ Functions to convert nidm turtle to superior formats
 
 from rdflib import Graph, plugin
 from rdflib.serializer import Serializer
+import rdfextras
+rdfextras.registerplugins()
 import json
 
 """
