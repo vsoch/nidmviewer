@@ -1,6 +1,6 @@
 <html>
-<!-- Nifti File Reader, for Server
-   @vsoch, Poldracklab <3
+<!-- Nidm Viewer, for Server
+     @vsoch, Poldracklab <3
 -->
 <head>
     <title>NIDM Viewer</title>
@@ -71,6 +71,8 @@
 
      var brain_images = [SUB_BRAINMAPS_SUB];
      var peaks = [SUB_PEAKS_SUB];
+     var column_names = [SUB_COLUMNS_SUB];
+
 
      var cx;
      var params = [];
@@ -146,7 +148,7 @@ function viewimage(file) {
 	     }
 
 	     // Generate a table with the first nidm file     
-	     nidm_table(peaks[nidm_files[0]])
+	     nidm_table(peaks[nidm_files[0]],column_names[nidm_files[0]])
 
              // Load first brain image into the viewer
              load_images(brain_images[nidm_files[0]])

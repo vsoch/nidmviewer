@@ -44,6 +44,14 @@ def make_tmp_folder():
     yield temp_dir
     shutil.rmtree(temp_dir)
 
+# Reading Files
+def read_file_lines(file_name):
+    filey = open(file_name,'r')
+    file_contents = filey.readlines()
+    filey.close()
+    return file_contents
+
+
 def download_file(src,dest):
     try:
         requester = urllib.URLopener()
@@ -53,7 +61,8 @@ def download_file(src,dest):
         print "Cannot download %s" %(src)
         return False
 
-# Filename
+
+# Filenames
 def get_name(path):
     return os.path.split(path)[1].split(".")[0]
 
