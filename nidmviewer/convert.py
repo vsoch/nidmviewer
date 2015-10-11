@@ -9,6 +9,11 @@ from rdflib import Graph, plugin
 from rdflib.serializer import Serializer
 import rdfextras
 rdfextras.registerplugins()
+plugin.register(
+    'json-ld',
+    Serializer,
+    'rdflib_jsonld.serializer',
+    'JsonLDSerializer')
 import json
 
 """
