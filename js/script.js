@@ -42,8 +42,10 @@ function load_images(brainmaps){
     for (i=0; i < image_files.length; i++) {
         image_file = image_files[i] 
         image_name = image_names[i].replace(".nii.gz","").replace(".nii","")
-        // Make the active image selected
-        $("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-image btn-primary circle' id='" + image_name +"' title='" + image_name + "' alt='" + image_name + "'>" + image_name + "</button>")
+        $("#nidm_images").append('<li><a href="#" onclick=viewimage(\""+ image_file +"\") id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
+        //$("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-image btn-primary circle' id='" + image_name +"' title='" + image_name + "' alt='" + image_name + "'>" + image_name + "</button>")
+
+
     }
 
     // Load the first map, whatever it is
