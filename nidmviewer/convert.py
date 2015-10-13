@@ -113,6 +113,7 @@ def get_nidm_keys():
        "Location":"http://www.w3.org/ns/prov#Location",
        "value":"http://www.w3.org/ns/prov#value",
        "wasDerivedFrom":"http://www.w3.org/ns/prov#wasDerivedFrom",
+       "wasGeneratedBy":"http://www.w3.org/ns/prov#wasGeneratedBy",
        "fileName":"http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileName"}
  
 
