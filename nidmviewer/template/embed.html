@@ -1,61 +1,47 @@
-<head>
-    <title>NIDM Viewer</title>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-2.1.4.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/bootstrap.min.css">
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.min.js"></script>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/d3.min.js"></script>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/script.js"></script>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/table.js"></script>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/scribl.min.js"></script>
-    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
-    <link href="https://rawgithub.com/vsoch/nidmviewer/master/css/fresh-bootstrap-table.css" rel="stylesheet" />
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="http://rawgithub.com/vsoch/font-brain/master/font-brain/font-brain.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/papaya.css" /> <!--version=0.8&build=910-->
-    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/papaya.js"></script> <!--version=0.8&build=910,beta-->
-</head>
+<!--[TAG_JQUERY_TAG]--><script src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-2.1.4.min.js"></script>
+<!--[TAG_BOOTSTRAPCSS_TAG]--><link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/bootstrap.min.css">
+<!--[TAG_BOOTSTRAPJS_TAG]--><script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.min.js"></script>
+<script src="https://rawgithub.com/vsoch/nidmviewer/master/js/script.js"></script>
+<script src="https://rawgithub.com/vsoch/nidmviewer/master/js/table.js"></script>
+<script src="https://rawgithub.com/vsoch/nidmviewer/master/js/scribl.min.js"></script>
+<script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
+<link href="https://rawgithub.com/vsoch/nidmviewer/master/css/fresh-bootstrap-table.css" rel="stylesheet" />
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="http://rawgithub.com/vsoch/font-brain/master/font-brain/font-brain.css" rel="stylesheet">
+<!--[TAG_PAPAYACSS_TAG]--><link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/papaya.css" /> <!--version=0.8&build=910-->
+<!--[TAG_PAPAYAJS_TAG]--><script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/papaya.js"></script> <!--version=0.8&build=910,beta-->
 
     <div class="row">
-
-            <!-- Buttons! -->
-            <div id="button_zone">
-
-                     <div class="float-left-wrapper">
-
-                    <!-- NIDM Selection -->
-                    <button class="btn btn-default">
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
-                                <ul class="dropdown-menu" id="nidm_selection">
-                                </ul>
-                        </li>
-                    </button>
-                    <!-- View image buttons will be appended here -->
-                    <button class="btn btn-default">
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
-                                <ul class="dropdown-menu" id="nidm_images">
-                                </ul>
-                        </li>
-                    </button>
-
-                </div>
-
-                <div class="float-right-wrapper">
-
-
-                    <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
-                        <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
-                    </a>
+    <!-- Buttons! -->
+        <div id="button_zone">
+            <div class="float-left-wrapper">
+                <!-- NIDM Selection -->
+                <button class="btn btn-default">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
+                        <ul class="dropdown-menu" id="nidm_selection">
+                        </ul>
+                    </li>
+                </button>
+                <!-- View image buttons will be appended here -->
+                <button class="btn btn-default">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
+                            <ul class="dropdown-menu" id="nidm_images">
+                            </ul>
+                    </li>
+                </button>
             </div>
+            <div class="float-right-wrapper">
+                <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
+                    <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
+                </a>
         </div>
-
-
-<div class="row">
+    </div>
+    <div class="row">
 
     <!-- Left sidebar region for tables -->
     <div id="bluetable" class="col-md-6">
-
         <!-- Tables for nidm will be dynamically rendered here -->
         <div class="row" id="tablerow">
         </div>
@@ -63,7 +49,6 @@
 
     <!-- Papaya viewer window -->
     <div id="pappy" class="col-md-6">
-
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.js"></script>
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
@@ -133,46 +118,27 @@ function viewimage(file) {
 </div>
 
 
-    <script type="text/javascript">        
-            
-        $().ready(function(){
+<script type="text/javascript">        
+    $().ready(function(){
+        // Generate initial table, and buttons for nidm
+	nidm_files = []
+	for (var nidm in peaks) {
+	    if (peaks.hasOwnProperty(nidm)) {
+                nidm_files.push(nidm)
+                console.log(nidm);
+                $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+             }
+	}
 
-	     // Generate initial table, and buttons for nidm
-	     nidm_files = []
-	     for (var nidm in peaks) {
-		 if (peaks.hasOwnProperty(nidm)) {
-		     nidm_files.push(nidm)
-                     console.log(nidm);
-                     $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
-		 }
-	     }
+	// Generate a table with the first nidm file     
+	nidm_table(peaks[nidm_files[0]],column_names[nidm_files[0]])
 
-	     // Generate a table with the first nidm file     
-	     nidm_table(peaks[nidm_files[0]],column_names[nidm_files[0]])
+        // Load first brain image into the viewer
+        load_images(brain_images[nidm_files[0]])
+        $('.dropdown-toggle').dropdown()
 
-             // Load first brain image into the viewer
-             load_images(brain_images[nidm_files[0]])
-             $('.dropdown-toggle').dropdown()
-
-         });
-
-        function operateFormatter(value, row, index) {
-            return [
-                //'<a rel="tooltip" title="Like" class="table-action like" href="javascript:void(0)" title="Like">',
-                //    '<i class="fa fa-heart"></i>',
-                //'</a>',
-                //'<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
-                //    '<i class="fa fa-edit"></i>',
-                //'</a>',
-                '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
-                    '<i class="fa fa-remove"></i>',
-                '</a>'
-            ].join('');
-        }
+});
        
-    </script>
-
-<script>
 $(function () {
     $(".search").css("width","160px")
     $('button[name=toggle]').css("height","40px")

@@ -3,7 +3,7 @@ viewer.py: part of the nidmviewer package
 
 '''
 from nidmviewer.utils import strip_url, get_random_name, get_extension, download_file, get_standard_brain
-from nidmviewer.templates import get_template, add_string, save_template
+from nidmviewer.templates import get_template, add_string, save_template, remove_resources
 from nidmviewer.sparql import get_coordinates, get_brainmaps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
@@ -11,8 +11,8 @@ import os
 import sys
 
 
-def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,
-             columns_to_remove=None,template_choice="index",port=None):
+def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,columns_to_remove=None,
+             template_choice="index",port=None,remove_scripts=None):
     '''generate
     will generate a nidmviewer to run locally or to embed into webserver
     Parameters
@@ -33,11 +33,22 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,
         should be unique.
     port: int
         port to serve nidmviewer, if view_in_browser==True
+    remove_scripts: list
+        one or more script tags to remove from the template. Options include
+        JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS
     '''
 
     # Check inputs and prepare template        
     ttl_files = check_inputs(ttl_files)
     template = get_template(template_choice)  
+
+    if remove_scripts != None:
+        if isinstance(remove_scripts,str):
+            remove_scripts = [remove_scripts]
+        template = template.split("\n")
+        resources = ["TAG_%s_TAG" %x for x in remove_scripts]
+        template = remove_resources(template,resources)
+        template = "\n".join(template)
 
     # Parse each nidm file
     peaks,brainmaps = parse_nidm(ttl_files)
@@ -81,7 +92,8 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,
         view(template,copy_list,port)
 
     else:
-        # We will embed json/objects in the page to render dynamically
+        if base_image == None:
+            base_image = get_standard_brain(load=False)
         template = add_string("[SUB_BRAINMAPS_SUB]",str(nifti_files),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)

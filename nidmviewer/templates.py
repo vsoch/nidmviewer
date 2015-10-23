@@ -1,5 +1,5 @@
 '''
-templates.py: part of the niftidrop package
+templates.py: part of the nidmviewer package
 Functions to work with html templates
 
 '''
