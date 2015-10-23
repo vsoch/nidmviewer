@@ -7,8 +7,8 @@ import os
 # These examples are for running the viewer from within python. You can achieve
 # the local browser version by running from the command line:
 
-# nidmviewer --ttl fsl/nidm.ttl
-# nidmviewer --ttl fsl/nidm1.ttl,nidm2.ttl
+# nidmviewer  fsl/nidm.ttl
+# nidmviewer  fsl/nidm1.ttl,nidm2.ttl
 
 # HTML FOR EMBEDDING #####################################################
 # Here are images that we want to see, these should be relative to your web server

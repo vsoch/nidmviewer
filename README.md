@@ -29,12 +29,13 @@ see [an example](examples/generate_viewer.py)
 
 When installing with setup.py, an executable, `nidmviewer` is installed in your bin to view nidm files on the fly:
 
-       nidmviewer fsl/nidm.ttl fsl/MNI152_T1_2mm_brain.nii.gz
+       nidmviewer fsl/nidm.ttl
 
-For example:
 
-      cd examples/
-      nidmviewer fsl/nidm.ttl fsl/MNI152_T1_2mm_brain.nii.gz --columns_to_remove=type,atLocation,wasDerivedFrom,value,coordinateVector
+To specify a standard brain image
+
+
+       nidmviewer fsl/nidm.ttl,fsl/MNI152_T1_2mm_brain.nii.gz
 
 
 ![img/example.png](img/example.png)
@@ -73,7 +74,6 @@ Please submit bugs, comments, and feedback as PRs. This application has not been
 
 #### Coming Soon
 
- - multiple image browsing
  - plotting
  - please [submit feedback and requests](https://github.com/vsoch/nidmviewer)
 
