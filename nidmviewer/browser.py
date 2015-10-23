@@ -16,7 +16,7 @@ html_snippet is the template code with images subbed
 copy_list is a dictionary, 
   with {nidm:{brainmap1_file:temp1_file,..brainmapN_file:tempN_file}}
 '''
-def view(html_snippet,copy_list):
+def view(html_snippet,copy_list,port):
     with make_tmp_folder() as tmp_dir:  
         # First copy all brain maps
         for real_path,temp_path in copy_list.iteritems():
@@ -29,7 +29,10 @@ def view(html_snippet,copy_list):
         print os.getcwd()
         write_file(html_snippet,tmp_file)
         tmp_file_base = os.path.basename(tmp_file)
-        httpd = run_webserver(html_page="%s" %(tmp_file_base))
+        if port!=None:
+            httpd = run_webserver(html_page="%s" %(tmp_file_base),port=port)
+        else:
+            httpd = run_webserver(html_page="%s" %(tmp_file_base))
         return httpd
 
 
@@ -46,11 +49,11 @@ def write_file(html_snippet,tmp_file):
     html_file.close()
 
 '''Web server (for Papaya Viewer in QA report'''
-def run_webserver(PORT=8088,html_page="index.html"):
+def run_webserver(port=8088,html_page="index.html"):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    httpd = SocketServer.TCPServer(("", PORT), Handler)
-    print "Serving pybraincompare at port", PORT
-    webbrowser.open("http://localhost:%s/%s" %(PORT,html_page))
+    httpd = SocketServer.TCPServer(("", port), Handler)
+    print "Serving pybraincompare at port", port
+    webbrowser.open("http://localhost:%s/%s" %(port,html_page))
     httpd.serve_forever()
     return httpd
 

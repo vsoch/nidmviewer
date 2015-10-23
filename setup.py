@@ -23,7 +23,8 @@ setup(
     packages=find_packages(),
 
     # Data
-    package_data = {'nidmviewer.template':['*.html','*.zip','*.js','*.css']},
+    package_data = {'nidmviewer.template':['*.html','*.zip','*.js','*.css'],
+                    'nidmviewer.data':['*.nii.gz']},
 
     # Details
     url="http://www.github.com/vsoch/nidmviewer",

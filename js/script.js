@@ -37,17 +37,15 @@ function load_images(brainmaps){
         }
      }
 
+
     // Add image buttons at the top
     $("#nidm_images").empty()
     for (i=0; i < image_files.length; i++) {
         image_file = image_files[i] 
         image_name = image_names[i].replace(".nii.gz","").replace(".nii","")
-        $("#nidm_images").append('<li><a href="#" onclick=viewimage(\""+ image_file +"\") id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
-        //$("#nidm_images").append("<button onclick=viewimage(\""+ image_file +"\") class='btn btn-image btn-primary circle' id='" + image_name +"' title='" + image_name + "' alt='" + image_name + "'>" + image_name + "</button>")
-
-
+        $("#nidm_images").append('<li><a href="#" onclick=viewimage("' + image_file + '") id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
     }
-
+    
     // Load the first map, whatever it is
     file = image_files[0]
     setTimeout(function(){

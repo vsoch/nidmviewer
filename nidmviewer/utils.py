@@ -4,15 +4,15 @@ Functions to work with html templates
 
 '''
 
-import contextlib
 import numpy as np
+import contextlib
 import tempfile
 import zipfile
 import urllib
 import shutil
 import string
 import random
-import utils
+import __init__
 import os
 
 
@@ -25,7 +25,7 @@ def strip_url(url,encode=True):
 
 # Get the directory of the package
 def get_package_dir():
-    return os.path.abspath(os.path.join(os.path.dirname(utils.__file__)))
+    return os.path.abspath(os.path.join(os.path.dirname(__init__.__file__)))
 
 # Make directory
 def make_dir(directory):
@@ -91,3 +91,12 @@ def unwrap_list_unique(list_of_lists):
         uniques = uniques + [item for item in listy]
     uniques = list(np.unique(uniques))
     return uniques
+
+# Brain image templates
+def get_standard_brain(load=True):
+    mr_directory = get_package_dir()
+    brain = "%s/data/MNI152_T1_2mm_brain.nii.gz" %(mr_directory)
+    if load:
+        return nib.load(brain)
+    else:
+        return brain
