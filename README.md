@@ -32,12 +32,6 @@ When installing with setup.py, an executable, `nidmviewer` is installed in your 
        nidmviewer fsl/nidm.ttl
 
 
-To specify a standard brain image
-
-
-       nidmviewer fsl/nidm.ttl,fsl/MNI152_T1_2mm_brain.nii.gz
-
-
 ![img/example.png](img/example.png)
 
 
