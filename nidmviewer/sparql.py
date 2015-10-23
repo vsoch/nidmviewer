@@ -27,12 +27,12 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
 
 def get_coordinates(ttl_file):
     query = """
-    SELECT DISTINCT ?name ?coordinate ?z ?peak_name ?pvalue_uncorrected
+    SELECT DISTINCT ?name ?coordinate ?z_score ?peak_name ?pvalue_uncorrected
     WHERE {?coord a nidm:NIDM_0000015 ;
            rdfs:label ?name ;
            nidm:NIDM_0000086 ?coordinate .
        ?peak prov:atLocation ?coord ;
-           nidm:NIDM_0000092 ?z ;
+           nidm:NIDM_0000092 ?z_score ;
            rdfs:label ?peak_name ;
            nidm:NIDM_0000116 ?pvalue_uncorrected .}
      ORDER BY ?name

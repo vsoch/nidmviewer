@@ -5,7 +5,7 @@ viewer.py: part of the nidmviewer package
 from nidmviewer.utils import strip_url, get_random_name, get_extension, download_file, get_standard_brain
 from nidmviewer.templates import get_template, add_string, save_template
 from nidmviewer.sparql import get_coordinates, get_brainmaps
-from nidmviewer.convert import getjson
+from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
 import os
 import sys
@@ -45,6 +45,15 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,
     # if the user wants to remove columns
     if columns_to_remove != None:
         peaks = remove_columns(peaks,columns_to_remove)
+
+    # Convert coordinates from '[x,y,z]' to [x],[y],[z]
+    for nidm,peak in peaks.iteritems():
+        coordinates = parse_coordinates(peak.coordinate.tolist())
+        peak = peak.drop("coordinate",axis=1)
+        peak["x"] = coordinates["x"].tolist()
+        peak["y"] = coordinates["y"].tolist()
+        peak["z"] = coordinates["z"].tolist()
+        peaks[nidm] = peak
 
     # Grab the column names, it could be different for each ttl
     column_names = get_column_names(peaks)
