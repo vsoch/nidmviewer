@@ -9,6 +9,9 @@ NIDM Results Viewer
  - uses [font brain](http://vsoch.github.io/font-brain) for nidm and brain imaging icons
 
 
+###### Documentation
+Complete documentation [is available](http://nidmviewer.readthedocs.org/en/latest/)
+
 ###### Installation
 
 To install
