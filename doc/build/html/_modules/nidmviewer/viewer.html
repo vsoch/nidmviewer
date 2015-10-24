@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nidmviewer.viewer &mdash; nidmviewer 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="nidmviewer 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nidmviewer
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nidmviewer</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vsoch/nidmviewer">GitHub repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">nidmviewer</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>nidmviewer.viewer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nidmviewer.viewer</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">viewer.py: part of the nidmviewer package</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.utils</span> <span class="kn">import</span> <span class="n">strip_url</span><span class="p">,</span> <span class="n">get_random_name</span><span class="p">,</span> <span class="n">get_extension</span><span class="p">,</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">get_standard_brain</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.templates</span> <span class="kn">import</span> <span class="n">get_template</span><span class="p">,</span> <span class="n">add_string</span><span class="p">,</span> <span class="n">save_template</span><span class="p">,</span> <span class="n">remove_resources</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.sparql</span> <span class="kn">import</span> <span class="n">get_coordinates</span><span class="p">,</span> <span class="n">get_brainmaps</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.convert</span> <span class="kn">import</span> <span class="n">parse_coordinates</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.browser</span> <span class="kn">import</span> <span class="n">view</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<div class="viewcode-block" id="generate"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.generate">[docs]</a><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">,</span><span class="n">base_image</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">retrieve</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">view_in_browser</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">columns_to_remove</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+             <span class="n">template_choice</span><span class="o">=</span><span class="s">&quot;index&quot;</span><span class="p">,</span><span class="n">port</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">remove_scripts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;generate</span>
+<span class="sd">    will generate a nidmviewer to run locally or to embed into webserver</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    ttl_files: str or list </span>
+<span class="sd">        one or more turtle files to add to the viewer. Images in the files should be available</span>
+<span class="sd">        at the specified URL. </span>
+<span class="sd">    retrieve: boolean</span>
+<span class="sd">        If set to False, the images are assumed to be on the same server, and will be </span>
+<span class="sd">        served with the given URL. If retrieve is set to True, the images will be retrieved</span>
+<span class="sd">        first and stored in a temporary directory.</span>
+<span class="sd">    base_image: str</span>
+<span class="sd">        The base image to use for the viewer. Not specifying a base_image will</span>
+<span class="sd">        yield a black background.</span>
+<span class="sd">    view_in_browser: boolean</span>
+<span class="sd">        open a temporary web browser (to run locally). If True, images will be copied</span>
+<span class="sd">        to a temp folder. If False, image_paths must be relative to web server. File names </span>
+<span class="sd">        should be unique.</span>
+<span class="sd">    port: int</span>
+<span class="sd">        port to serve nidmviewer, if view_in_browser==True</span>
+<span class="sd">    remove_scripts: list</span>
+<span class="sd">        one or more script tags to remove from the template. Options include</span>
+<span class="sd">        JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c"># Check inputs and prepare template        </span>
+    <span class="n">ttl_files</span> <span class="o">=</span> <span class="n">check_inputs</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">)</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="n">template_choice</span><span class="p">)</span>  
+
+    <span class="k">if</span> <span class="n">remove_scripts</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">remove_scripts</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">remove_scripts</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_scripts</span><span class="p">]</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;TAG_</span><span class="si">%s</span><span class="s">_TAG&quot;</span> <span class="o">%</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">remove_scripts</span><span class="p">]</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">remove_resources</span><span class="p">(</span><span class="n">template</span><span class="p">,</span><span class="n">resources</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+    <span class="c"># Parse each nidm file</span>
+    <span class="n">peaks</span><span class="p">,</span><span class="n">brainmaps</span> <span class="o">=</span> <span class="n">parse_nidm</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">)</span>
+
+    <span class="c"># if the user wants to remove columns</span>
+    <span class="k">if</span> <span class="n">columns_to_remove</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">remove_columns</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">columns_to_remove</span><span class="p">)</span>
+
+    <span class="c"># Convert coordinates from &#39;[x,y,z]&#39; to [x],[y],[z]</span>
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">peak</span> <span class="ow">in</span> <span class="n">peaks</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="n">parse_coordinates</span><span class="p">(</span><span class="n">peak</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">peak</span> <span class="o">=</span> <span class="n">peak</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">&quot;coordinate&quot;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">peak</span><span class="p">[</span><span class="s">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span><span class="p">[</span><span class="s">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">peak</span><span class="p">[</span><span class="s">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span><span class="p">[</span><span class="s">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">peak</span><span class="p">[</span><span class="s">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span><span class="p">[</span><span class="s">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">peaks</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">peak</span>
+
+    <span class="c"># Grab the column names, it could be different for each ttl</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="n">get_column_names</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+
+    <span class="c"># We want pandas df in the format of dict/json strings for javascript embed</span>
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">peak</span> <span class="ow">in</span> <span class="n">peaks</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">peaks</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_dictionary</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span><span class="n">strings</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>    
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">maps</span> <span class="ow">in</span> <span class="n">brainmaps</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">brainmaps</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_dictionary</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span><span class="n">strip_columns</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>    
+
+    <span class="c"># Retrieve nifti files, if necessary</span>
+    <span class="n">nifti_files</span> <span class="o">=</span> <span class="n">retrieve_nifti</span><span class="p">(</span><span class="n">brainmaps</span><span class="p">,</span><span class="n">retrieve</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">view_in_browser</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">tmp_nifti_files</span><span class="p">,</span><span class="n">copy_list</span> <span class="o">=</span> <span class="n">generate_temp</span><span class="p">(</span><span class="n">nifti_files</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">base_image</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">base_image</span> <span class="o">=</span> <span class="n">get_standard_brain</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">tmp_base_image</span><span class="p">,</span><span class="n">base_copy</span> <span class="o">=</span> <span class="n">generate_temp</span><span class="p">({</span><span class="n">base_image</span><span class="p">:</span> <span class="p">{</span><span class="n">base_image</span><span class="p">:</span><span class="n">base_image</span><span class="p">}})</span>
+            <span class="n">copy_list</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">base_copy</span><span class="p">)</span>
+            <span class="n">base_image</span> <span class="o">=</span> <span class="n">base_copy</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_BRAINMAPS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_nifti_files</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_PEAKS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">peaks</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_BASEIMAGE_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">base_image</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_COLUMNS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">column_names</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">view</span><span class="p">(</span><span class="n">template</span><span class="p">,</span><span class="n">copy_list</span><span class="p">,</span><span class="n">port</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">base_image</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">base_image</span> <span class="o">=</span> <span class="n">get_standard_brain</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_BRAINMAPS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">nifti_files</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_PEAKS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">peaks</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_BASEIMAGE_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">base_image</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">add_string</span><span class="p">(</span><span class="s">&quot;[SUB_COLUMNS_SUB]&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">column_names</span><span class="p">),</span><span class="n">template</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">template</span>
+
+</div>
+<div class="viewcode-block" id="parse_nidm"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.parse_nidm">[docs]</a><span class="k">def</span> <span class="nf">parse_nidm</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;parse_nidm</span>
+<span class="sd">        Extract brainmaps and coordinates from ttl files</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    ==========</span>
+<span class="sd">    ttl_files: list</span>
+<span class="sd">        list of full paths to ttl files</span>
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    peaks: dict</span>
+<span class="sd">        dict of pandas data frames, one for each ttl_file, with columns</span>
+<span class="sd">        coordinate, z, peak_name, pvalue_uncorrected</span>
+<span class="sd">    maps: dict</span>
+<span class="sd">        dict of pandas data frames, one for each ttl_file, with columns</span>
+<span class="sd">        filename and location for all brain maps specified in ttl.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">)):</span>
+        <span class="n">ttl_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">get_coordinates</span><span class="p">(</span><span class="n">ttl_file</span><span class="p">)</span>
+        <span class="n">brainmaps</span> <span class="o">=</span> <span class="n">get_brainmaps</span><span class="p">(</span><span class="n">ttl_file</span><span class="p">)</span>
+        <span class="n">peaks</span><span class="p">[</span><span class="n">ttl_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="n">maps</span><span class="p">[</span><span class="n">ttl_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">brainmaps</span>
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span><span class="n">maps</span>
+
+</div>
+<div class="viewcode-block" id="to_dictionary"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.to_dictionary">[docs]</a><span class="k">def</span> <span class="nf">to_dictionary</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">orient</span><span class="o">=</span><span class="s">&quot;records&quot;</span><span class="p">,</span><span class="n">strip_columns</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">strings</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;to_dictionary: </span>
+<span class="sd">       Convert a pandas dataframe into the string of a json/dict to </span>
+<span class="sd">       embed into page</span>
+<span class="sd">       Parameters</span>
+<span class="sd">       ==========</span>
+<span class="sd">       df: pandas data frame</span>
+<span class="sd">           data frame to convert</span>
+<span class="sd">       orient: str</span>
+<span class="sd">           orientation to convert with (default is &quot;records&quot;)</span>
+<span class="sd">       strip_columns: boolean</span>
+<span class="sd">           if true, will return df.to_dict(orient=orient).values()</span>
+<span class="sd">           default is False</span>
+<span class="sd">       strings: boolean</span>
+<span class="sd">           True will convert all columns to strings.</span>
+<span class="sd">       &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">strings</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">strip_columns</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="n">orient</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="retrieve_nifti"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.retrieve_nifti">[docs]</a><span class="k">def</span> <span class="nf">retrieve_nifti</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span><span class="n">retrieve</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;retrieve_nifti</span>
+<span class="sd">    Download the image to a temporary folder if the user needs to</span>
+<span class="sd">    retrieve it. Otherwise, return file</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    maps: dict</span>
+<span class="sd">        dictionary (key, is ttl_file, and value, is dictionary of {filename:fullpath}</span>
+<span class="sd">        for all brainmaps extracted from the ttl files</span>
+<span class="sd">    retrieve: boolean</span>
+<span class="sd">    if True, will download brainmaps to temporary folder first. If false, encodes</span>
+<span class="sd">    path in utf-8 for rendering in javascript</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># Note: retrieve = True has not been tested!</span>
+    <span class="n">map_paths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">maplist</span> <span class="ow">in</span> <span class="n">maps</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">retrieve</span><span class="p">:</span>
+            <span class="n">single_maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">brainmap_id</span><span class="p">,</span><span class="n">brainmap</span> <span class="ow">in</span> <span class="n">maplist</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="n">image_ext</span> <span class="o">=</span> <span class="n">get_extension</span><span class="p">(</span><span class="n">brainmap</span><span class="p">)</span>
+                <span class="n">temp_path</span> <span class="o">=</span> <span class="n">get_random_name</span><span class="p">()</span>
+                <span class="n">temp_image_path</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">temp_path</span><span class="p">,</span><span class="n">image_ext</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">download_file</span><span class="p">(</span><span class="n">brainmap</span><span class="p">,</span><span class="n">temp_image_path</span><span class="p">):</span>
+                    <span class="n">single_maps</span><span class="p">[</span><span class="n">strip_url</span><span class="p">(</span><span class="n">brainmap_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">temp_image_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">single_maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">brainmap_id</span><span class="p">,</span><span class="n">brainmap</span> <span class="ow">in</span> <span class="n">maplist</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="n">single_maps</span><span class="p">[</span><span class="n">strip_url</span><span class="p">(</span><span class="n">brainmap_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">brainmap</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span> 
+        <span class="n">map_paths</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_maps</span>
+    <span class="k">return</span> <span class="n">map_paths</span>
+
+</div>
+<div class="viewcode-block" id="get_column_names"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.get_column_names">[docs]</a><span class="k">def</span> <span class="nf">get_column_names</span><span class="p">(</span><span class="n">peaks</span><span class="p">):</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">df</span> <span class="ow">in</span> <span class="n">peaks</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">column_names</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">column_names</span>
+
+</div>
+<div class="viewcode-block" id="generate_temp"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.generate_temp">[docs]</a><span class="k">def</span> <span class="nf">generate_temp</span><span class="p">(</span><span class="n">nifti_files</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;generate_temp</span>
+<span class="sd">    generate a lookup of temporary files</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    nifti_files: dictionary </span>
+<span class="sd">        (key is ttl file, value is dictionary of nifti files {filename:fullpath}</span>
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    new_nifti_files: dict</span>
+<span class="sd">        (key is ttl file, value is dictionary of nifti files {filename:fullpath}</span>
+<span class="sd">        equivalent files but without path as all files will go in same level</span>
+<span class="sd">        of the temporary directory</span>
+<span class="sd">    copy_list: dict</span>
+<span class="sd">        keys are current paths, values are temporary file names corresponding to</span>
+<span class="sd">        fullpath in new_nifti_files[ttl_file] dictionary. This is used to copy</span>
+<span class="sd">        images into the temporary directory with the correct names. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">new_nifti_files</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">copy_list</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">nidm_file</span><span class="p">,</span><span class="n">maplist</span> <span class="ow">in</span> <span class="n">nifti_files</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">nidm_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">nidm_file</span><span class="p">)</span>
+        <span class="n">single_maps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">brainmap_id</span><span class="p">,</span><span class="n">brainmap</span> <span class="ow">in</span> <span class="n">maplist</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">brainmap_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">brainmap</span><span class="p">)</span>
+            <span class="n">image_ext</span> <span class="o">=</span> <span class="n">get_extension</span><span class="p">(</span><span class="n">brainmap</span><span class="p">)</span>
+            <span class="n">temp_path</span> <span class="o">=</span> <span class="n">get_random_name</span><span class="p">()</span>
+            <span class="n">temp_image_path</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">temp_path</span><span class="p">,</span><span class="n">image_ext</span><span class="p">)</span>
+            <span class="n">single_maps</span><span class="p">[</span><span class="n">strip_url</span><span class="p">(</span><span class="n">brainmap_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">temp_image_path</span>
+            <span class="n">copy_list</span><span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">nidm_directory</span><span class="p">,</span><span class="n">brainmap_base</span><span class="p">)]</span> <span class="o">=</span> <span class="n">temp_image_path</span>
+        <span class="n">new_nifti_files</span><span class="p">[</span><span class="n">nidm_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_maps</span>
+    <span class="k">return</span> <span class="n">new_nifti_files</span><span class="p">,</span><span class="n">copy_list</span>      
+
+</div>
+<div class="viewcode-block" id="check_inputs"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.check_inputs">[docs]</a><span class="k">def</span> <span class="nf">check_inputs</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;check_input.</span>
+<span class="sd">    will return a list of ttl files, more advanced</span>
+<span class="sd">    functionality can be added if needed (validation, etc)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    ttl_files: string or list</span>
+<span class="sd">        full paths to ttl files   </span>
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">        list of ttl files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ttl_files</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span> <span class="n">ttl_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">ttl_files</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ttl_files</span>
+</div>
+<div class="viewcode-block" id="remove_columns"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.viewer.remove_columns">[docs]</a><span class="k">def</span> <span class="nf">remove_columns</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">columns_to_remove</span><span class="p">):</span>
+    <span class="n">newpeaks</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">nidm</span><span class="p">,</span><span class="n">df</span> <span class="ow">in</span> <span class="n">peaks</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">columns_to_remove</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">column_name</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">newpeaks</span><span class="p">[</span><span class="n">nidm</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">return</span> <span class="n">newpeaks</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vanessa Sochat, NIDASH Working Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nidmviewer.browser &mdash; nidmviewer 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="nidmviewer 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> nidmviewer
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">nidmviewer</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vsoch/nidmviewer">GitHub repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">nidmviewer</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>nidmviewer.browser</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nidmviewer.browser</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">browser.py: part of nidmviewer package</span>
+<span class="sd">Functions to visualize in browser</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">nidmviewer.utils</span> <span class="kn">import</span> <span class="n">make_tmp_folder</span>
+<span class="kn">import</span> <span class="nn">SimpleHTTPServer</span>
+<span class="kn">import</span> <span class="nn">SocketServer</span>
+<span class="kn">import</span> <span class="nn">webbrowser</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">View code in temporary browser!</span>
+<span class="sd">html_snippet is the template code with images subbed</span>
+<span class="sd">copy_list is a dictionary, </span>
+<span class="sd">  with {nidm:{brainmap1_file:temp1_file,..brainmapN_file:tempN_file}}</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="view"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.browser.view">[docs]</a><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">,</span><span class="n">copy_list</span><span class="p">,</span><span class="n">port</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">make_tmp_folder</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp_dir</span><span class="p">:</span>  
+        <span class="c"># First copy all brain maps</span>
+        <span class="k">for</span> <span class="n">real_path</span><span class="p">,</span><span class="n">temp_path</span> <span class="ow">in</span> <span class="n">copy_list</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">real_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">real_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;file://&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">real_path</span><span class="p">,</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span><span class="n">temp_path</span><span class="p">))</span>
+        <span class="c"># Now write template to temporary file</span>
+        <span class="n">tmp_file</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">/pycompare.html&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span>
+        <span class="c"># Change directory and start a web server</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">write_file</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">,</span><span class="n">tmp_file</span><span class="p">)</span>
+        <span class="n">tmp_file_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">port</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+            <span class="n">httpd</span> <span class="o">=</span> <span class="n">run_webserver</span><span class="p">(</span><span class="n">html_page</span><span class="o">=</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_file_base</span><span class="p">),</span><span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">httpd</span> <span class="o">=</span> <span class="n">run_webserver</span><span class="p">(</span><span class="n">html_page</span><span class="o">=</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_file_base</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">httpd</span>
+
+</div>
+<span class="sd">&#39;&#39;&#39;Internal view function&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="internal_view"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.browser.internal_view">[docs]</a><span class="k">def</span> <span class="nf">internal_view</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">,</span><span class="n">tmp_file</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;file://</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">)</span>
+    <span class="n">write_file</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">,</span><span class="n">tmp_file</span><span class="p">)</span>
+    <span class="n">webbrowser</span><span class="o">.</span><span class="n">open_new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Press Enter to finish...&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="write_file"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.browser.write_file">[docs]</a><span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">,</span><span class="n">tmp_file</span><span class="p">):</span>
+    <span class="n">html_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">,</span><span class="s">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">html_file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">)</span>
+    <span class="n">html_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<span class="sd">&#39;&#39;&#39;Web server (for Papaya Viewer in QA report&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="run_webserver"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.browser.run_webserver">[docs]</a><span class="k">def</span> <span class="nf">run_webserver</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8088</span><span class="p">,</span><span class="n">html_page</span><span class="o">=</span><span class="s">&quot;index.html&quot;</span><span class="p">):</span>
+    <span class="n">Handler</span> <span class="o">=</span> <span class="n">SimpleHTTPServer</span><span class="o">.</span><span class="n">SimpleHTTPRequestHandler</span>
+    <span class="n">httpd</span> <span class="o">=</span> <span class="n">SocketServer</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">((</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Serving pybraincompare at port&quot;</span><span class="p">,</span> <span class="n">port</span>
+    <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://localhost:</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">port</span><span class="p">,</span><span class="n">html_page</span><span class="p">))</span>
+    <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">httpd</span>
+</div>
+<span class="sd">&quot;&quot;&quot;Get svg html from matplotlib figures (eg, glass brain images)&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="get_svg_html"><a class="viewcode-back" href="../../nidmviewer.html#nidmviewer.browser.get_svg_html">[docs]</a><span class="k">def</span> <span class="nf">get_svg_html</span><span class="p">(</span><span class="n">mpl_figures</span><span class="p">):</span>
+    <span class="n">svg_images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">make_tmp_folder</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp_dir</span><span class="p">:</span>  
+        <span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">mpl_figures</span><span class="p">:</span>
+            <span class="n">tmp_svg</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">/mplfig.svg&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">tmp_svg</span><span class="p">)</span>
+            <span class="n">fig_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_svg</span><span class="p">,</span><span class="s">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">svg_images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fig_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">svg_images</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vanessa Sochat, NIDASH Working Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

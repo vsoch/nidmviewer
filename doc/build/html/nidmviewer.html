@@ -1,0 +1,568 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nidmviewer package &mdash; nidmviewer 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="nidmviewer 1.0 documentation" href="index.html"/>
+        <link rel="up" title="nidmviewer" href="modules.html"/>
+        <link rel="prev" title="nidmviewer" href="modules.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> nidmviewer
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">nidmviewer</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">nidmviewer package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.browser">nidmviewer.browser module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.convert">nidmviewer.convert module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.scripts">nidmviewer.scripts module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.sparql">nidmviewer.sparql module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.templates">nidmviewer.templates module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.utils">nidmviewer.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer.viewer">nidmviewer.viewer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nidmviewer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vsoch/nidmviewer">GitHub repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">nidmviewer</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">nidmviewer</a> &raquo;</li>
+      
+    <li>nidmviewer package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/nidmviewer.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nidmviewer-package">
+<h1>nidmviewer package<a class="headerlink" href="#nidmviewer-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nidmviewer.browser">
+<span id="nidmviewer-browser-module"></span><h2>nidmviewer.browser module<a class="headerlink" href="#module-nidmviewer.browser" title="Permalink to this headline">¶</a></h2>
+<p>browser.py: part of nidmviewer package
+Functions to visualize in browser</p>
+<dl class="function">
+<dt id="nidmviewer.browser.get_svg_html">
+<code class="descclassname">nidmviewer.browser.</code><code class="descname">get_svg_html</code><span class="sig-paren">(</span><em>mpl_figures</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/browser.html#get_svg_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.browser.get_svg_html" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.browser.internal_view">
+<code class="descclassname">nidmviewer.browser.</code><code class="descname">internal_view</code><span class="sig-paren">(</span><em>html_snippet</em>, <em>tmp_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/browser.html#internal_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.browser.internal_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.browser.run_webserver">
+<code class="descclassname">nidmviewer.browser.</code><code class="descname">run_webserver</code><span class="sig-paren">(</span><em>port=8088</em>, <em>html_page='index.html'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/browser.html#run_webserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.browser.run_webserver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.browser.view">
+<code class="descclassname">nidmviewer.browser.</code><code class="descname">view</code><span class="sig-paren">(</span><em>html_snippet</em>, <em>copy_list</em>, <em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/browser.html#view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.browser.view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.browser.write_file">
+<code class="descclassname">nidmviewer.browser.</code><code class="descname">write_file</code><span class="sig-paren">(</span><em>html_snippet</em>, <em>tmp_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/browser.html#write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.browser.write_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.convert">
+<span id="nidmviewer-convert-module"></span><h2>nidmviewer.convert module<a class="headerlink" href="#module-nidmviewer.convert" title="Permalink to this headline">¶</a></h2>
+<p>convert</p>
+<p>Functions to convert/parse output from nidm sparql queries</p>
+<dl class="function">
+<dt id="nidmviewer.convert.getjson">
+<code class="descclassname">nidmviewer.convert.</code><code class="descname">getjson</code><span class="sig-paren">(</span><em>nidm_file</em>, <em>format='n3'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/convert.html#getjson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.convert.getjson" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.convert.parse_coordinates">
+<code class="descclassname">nidmviewer.convert.</code><code class="descname">parse_coordinates</code><span class="sig-paren">(</span><em>coordinates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/convert.html#parse_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.convert.parse_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a list of xyz strings in format &#8216;[x,y,z]&#8217; to separate variables
+This is what we get from the sparql query
+Parameters
+==========
+coordinates: list</p>
+<blockquote>
+<div>a list of xyz coordinate strings, each a list in a string &#8216;[x,y,z]&#8217;</div></blockquote>
+<p>coordinate_df: pandas dataframe
+columns are x,y,z</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.convert.prettyjson">
+<code class="descclassname">nidmviewer.convert.</code><code class="descname">prettyjson</code><span class="sig-paren">(</span><em>nidm_file</em>, <em>format='n3'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/convert.html#prettyjson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.convert.prettyjson" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.scripts">
+<span id="nidmviewer-scripts-module"></span><h2>nidmviewer.scripts module<a class="headerlink" href="#module-nidmviewer.scripts" title="Permalink to this headline">¶</a></h2>
+<p>script.py: part of nidmviewer package
+Functions to visualize in browser</p>
+<dl class="function">
+<dt id="nidmviewer.scripts.main">
+<code class="descclassname">nidmviewer.scripts.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/scripts.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.scripts.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.sparql">
+<span id="nidmviewer-sparql-module"></span><h2>nidmviewer.sparql module<a class="headerlink" href="#module-nidmviewer.sparql" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nidmviewer.sparql.do_query">
+<code class="descclassname">nidmviewer.sparql.</code><code class="descname">do_query</code><span class="sig-paren">(</span><em>ttl_file</em>, <em>query</em>, <em>rdf_format='turtle'</em>, <em>serialize_format='csv'</em>, <em>output_df=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/sparql.html#do_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.sparql.do_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.sparql.get_brainmaps">
+<code class="descclassname">nidmviewer.sparql.</code><code class="descname">get_brainmaps</code><span class="sig-paren">(</span><em>ttl_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/sparql.html#get_brainmaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.sparql.get_brainmaps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.sparql.get_coordinates">
+<code class="descclassname">nidmviewer.sparql.</code><code class="descname">get_coordinates</code><span class="sig-paren">(</span><em>ttl_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/sparql.html#get_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.sparql.get_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.templates">
+<span id="nidmviewer-templates-module"></span><h2>nidmviewer.templates module<a class="headerlink" href="#module-nidmviewer.templates" title="Permalink to this headline">¶</a></h2>
+<p>templates.py: part of the nidmviewer package
+Functions to work with html templates</p>
+<dl class="function">
+<dt id="nidmviewer.templates.add_javascript_function">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">add_javascript_function</code><span class="sig-paren">(</span><em>function_code</em>, <em>template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#add_javascript_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.add_javascript_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.add_string">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">add_string</code><span class="sig-paren">(</span><em>tag</em>, <em>substitution</em>, <em>template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#add_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.add_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.get_image">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">get_image</code><span class="sig-paren">(</span><em>image_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.get_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.get_template">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">get_template</code><span class="sig-paren">(</span><em>html_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#get_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.get_template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.read_template">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">read_template</code><span class="sig-paren">(</span><em>html_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#read_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.read_template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.remove_resources">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">remove_resources</code><span class="sig-paren">(</span><em>html_snippet</em>, <em>script_names</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#remove_resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.remove_resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.templates.save_template">
+<code class="descclassname">nidmviewer.templates.</code><code class="descname">save_template</code><span class="sig-paren">(</span><em>html_snippet</em>, <em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/templates.html#save_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.templates.save_template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.utils">
+<span id="nidmviewer-utils-module"></span><h2>nidmviewer.utils module<a class="headerlink" href="#module-nidmviewer.utils" title="Permalink to this headline">¶</a></h2>
+<p>utils.py: part of the nidmviewer package
+Functions to work with html templates</p>
+<dl class="function">
+<dt id="nidmviewer.utils.download_file">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">download_file</code><span class="sig-paren">(</span><em>src</em>, <em>dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#download_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.download_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.get_extension">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">get_extension</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#get_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.get_extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.get_name">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">get_name</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.get_package_dir">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">get_package_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#get_package_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.get_package_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.get_random_name">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">get_random_name</code><span class="sig-paren">(</span><em>length=6</em>, <em>chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#get_random_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.get_random_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.get_standard_brain">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">get_standard_brain</code><span class="sig-paren">(</span><em>load=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#get_standard_brain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.get_standard_brain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.make_dir">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">make_dir</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#make_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.make_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.make_png_paths">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">make_png_paths</code><span class="sig-paren">(</span><em>nifti_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#make_png_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.make_png_paths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.make_tmp_folder">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">make_tmp_folder</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#make_tmp_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.make_tmp_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.read_file_lines">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">read_file_lines</code><span class="sig-paren">(</span><em>file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#read_file_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.read_file_lines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.strip_url">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">strip_url</code><span class="sig-paren">(</span><em>url</em>, <em>encode=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#strip_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.strip_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.unwrap_list_unique">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">unwrap_list_unique</code><span class="sig-paren">(</span><em>list_of_lists</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#unwrap_list_unique"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.unwrap_list_unique" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.utils.unzip">
+<code class="descclassname">nidmviewer.utils.</code><code class="descname">unzip</code><span class="sig-paren">(</span><em>source</em>, <em>dest_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/utils.html#unzip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.utils.unzip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer.viewer">
+<span id="nidmviewer-viewer-module"></span><h2>nidmviewer.viewer module<a class="headerlink" href="#module-nidmviewer.viewer" title="Permalink to this headline">¶</a></h2>
+<p>viewer.py: part of the nidmviewer package</p>
+<dl class="function">
+<dt id="nidmviewer.viewer.check_inputs">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">check_inputs</code><span class="sig-paren">(</span><em>ttl_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#check_inputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.check_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>check_input.
+will return a list of ttl files, more advanced
+functionality can be added if needed (validation, etc)
+Parameters
+==========
+ttl_files: string or list</p>
+<blockquote>
+<div>full paths to ttl files</div></blockquote>
+<blockquote>
+<div>list of ttl files</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.generate">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">generate</code><span class="sig-paren">(</span><em>ttl_files</em>, <em>base_image=None</em>, <em>retrieve=False</em>, <em>view_in_browser=False</em>, <em>columns_to_remove=None</em>, <em>template_choice='index'</em>, <em>port=None</em>, <em>remove_scripts=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>will generate a nidmviewer to run locally or to embed into webserver
+Parameters
+==========
+ttl_files: str or list</p>
+<blockquote>
+<div>one or more turtle files to add to the viewer. Images in the files should be available
+at the specified URL.</div></blockquote>
+<dl class="docutils">
+<dt>retrieve: boolean</dt>
+<dd>If set to False, the images are assumed to be on the same server, and will be 
+served with the given URL. If retrieve is set to True, the images will be retrieved
+first and stored in a temporary directory.</dd>
+<dt>base_image: str</dt>
+<dd>The base image to use for the viewer. Not specifying a base_image will
+yield a black background.</dd>
+<dt>view_in_browser: boolean</dt>
+<dd>open a temporary web browser (to run locally). If True, images will be copied
+to a temp folder. If False, image_paths must be relative to web server. File names 
+should be unique.</dd>
+<dt>port: int</dt>
+<dd>port to serve nidmviewer, if view_in_browser==True</dd>
+<dt>remove_scripts: list</dt>
+<dd>one or more script tags to remove from the template. Options include
+JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.generate_temp">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">generate_temp</code><span class="sig-paren">(</span><em>nifti_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#generate_temp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.generate_temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate a lookup of temporary files
+Parameters
+==========
+nifti_files: dictionary</p>
+<blockquote>
+<div>(key is ttl file, value is dictionary of nifti files {filename:fullpath}</div></blockquote>
+<dl class="docutils">
+<dt>new_nifti_files: dict</dt>
+<dd>(key is ttl file, value is dictionary of nifti files {filename:fullpath}
+equivalent files but without path as all files will go in same level
+of the temporary directory</dd>
+<dt>copy_list: dict</dt>
+<dd>keys are current paths, values are temporary file names corresponding to
+fullpath in new_nifti_files[ttl_file] dictionary. This is used to copy
+images into the temporary directory with the correct names.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.get_column_names">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">get_column_names</code><span class="sig-paren">(</span><em>peaks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#get_column_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.get_column_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.parse_nidm">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">parse_nidm</code><span class="sig-paren">(</span><em>ttl_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#parse_nidm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.parse_nidm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract brainmaps and coordinates from ttl files
+Parameters:
+==========
+ttl_files: list</p>
+<blockquote>
+<div>list of full paths to ttl files</div></blockquote>
+<dl class="docutils">
+<dt>peaks: dict</dt>
+<dd>dict of pandas data frames, one for each ttl_file, with columns
+coordinate, z, peak_name, pvalue_uncorrected</dd>
+<dt>maps: dict</dt>
+<dd>dict of pandas data frames, one for each ttl_file, with columns
+filename and location for all brain maps specified in ttl.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.remove_columns">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">remove_columns</code><span class="sig-paren">(</span><em>peaks</em>, <em>columns_to_remove</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#remove_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.remove_columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.retrieve_nifti">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">retrieve_nifti</code><span class="sig-paren">(</span><em>maps</em>, <em>retrieve</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#retrieve_nifti"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.retrieve_nifti" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the image to a temporary folder if the user needs to
+retrieve it. Otherwise, return file
+Parameters
+==========
+maps: dict</p>
+<blockquote>
+<div>dictionary (key, is ttl_file, and value, is dictionary of {filename:fullpath}
+for all brainmaps extracted from the ttl files</div></blockquote>
+<p>retrieve: boolean
+if True, will download brainmaps to temporary folder first. If false, encodes
+path in utf-8 for rendering in javascript</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nidmviewer.viewer.to_dictionary">
+<code class="descclassname">nidmviewer.viewer.</code><code class="descname">to_dictionary</code><span class="sig-paren">(</span><em>df</em>, <em>orient='records'</em>, <em>strip_columns=False</em>, <em>strings=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nidmviewer/viewer.html#to_dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nidmviewer.viewer.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>to_dictionary: 
+Convert a pandas dataframe into the string of a json/dict to 
+embed into page
+Parameters
+==========
+df: pandas data frame</p>
+<blockquote>
+<div>data frame to convert</div></blockquote>
+<dl class="docutils">
+<dt>orient: str</dt>
+<dd>orientation to convert with (default is &#8220;records&#8221;)</dd>
+<dt>strip_columns: boolean</dt>
+<dd>if true, will return df.to_dict(orient=orient).values()
+default is False</dd>
+<dt>strings: boolean</dt>
+<dd>True will convert all columns to strings.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nidmviewer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nidmviewer" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="nidmviewer" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vanessa Sochat, NIDASH Working Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
