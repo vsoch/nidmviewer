@@ -3,10 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Nidmviewer
-==========
-
 NIDM Results Viewer
+===================
+
 This is a command line (to browser) as well as python module for rendering NIDM Results (turtle files) into an interactive viewer. The viewer currently supports parsing and interactive browsing of peak coordinates, viewing associated brain maps, and saving static images to file.
 
 Contents:
