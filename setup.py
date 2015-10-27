@@ -34,7 +34,7 @@ setup(
     long_description=long_description,
     keywords='nidm nidm-results brain imaging neuroimaging',
 
-    install_requires = ['numpy','rdflib'. 'rdfextras'],
+    install_requires = ['numpy','rdflib', 'rdfextras', 'rdflib-jsonld'],
 
     entry_points = {
         'console_scripts': [
