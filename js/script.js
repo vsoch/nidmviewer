@@ -33,7 +33,7 @@ function load_nidm(nidm_file){
     for (i=0; i < peak_table.length; i++) {
         image_file = peak_table[i][location_key]
         image_name = peak_table[i][filename_key] 
-        image_name = image_names.replace(".nii.gz","").replace(".nii","")
+        image_name = image_name.replace(".nii.gz","").replace(".nii","")
         $("#nidm_images").append('<li><a href="#" onclick=view_nidm(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
     }
     
