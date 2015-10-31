@@ -52,3 +52,28 @@ def get_brainmaps(ttl_file):
             }
             """
     return do_query(ttl_file,query)
+
+def get_coordinates_and_maps(ttl_file):
+    query = """
+            PREFIX nidm: <http://purl.org/nidash/nidm#>
+            PREFIX prov: <http://www.w3.org/ns/prov#>
+            prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
+            SELECT DISTINCT ?statmap ?statmap_filename ?statmap_location ?statmap_type ?z_score ?pvalue_uncorrected ?coord_name ?coordinate
+            WHERE {?statmap #nidm:NIDM_0000123 obo:STATO_0000176 ; # t-statistic
+            #nidm:NIDM_0000123 obo:STATO_0000376 ; #z-statistic
+            nidm:NIDM_0000123 ?statmap_type ;
+            prov:atLocation ?statmap_location ;
+            nfo:fileName ?statmap_filename .
+            ?inference prov:used ?statmap .
+            ?excursion_set_map prov:wasGeneratedBy ?inference .
+            ?sig_cluster prov:wasDerivedFrom ?excusion_set_map .
+            ?peak prov:wasDerivedFrom ?sig_cluster ;
+            prov:atLocation ?coord ;
+            nidm:NIDM_0000092 ?z_score ;
+            rdfs:label ?peak_name ;
+            nidm:NIDM_0000116 ?pvalue_uncorrected .
+            ?coord a nidm:NIDM_0000015 ;
+            rdfs:label ?coord_name ;
+            nidm:NIDM_0000086 ?coordinate .}
+            """
+    return do_query(ttl_file,query)

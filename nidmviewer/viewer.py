@@ -51,7 +51,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         template = "\n".join(template)
 
     # Parse each nidm file
-    peaks,brainmaps = parse_nidm(ttl_files)
+    peaks = parse_nidm(ttl_files)
 
     # if the user wants to remove columns
     if columns_to_remove != None:
@@ -72,21 +72,22 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():
         peaks[nidm] = to_dictionary(peak,strings=True)    
-    for nidm,maps in brainmaps.iteritems():
-        brainmaps[nidm] = to_dictionary(maps,strip_columns=True)[0]    
 
     # Retrieve nifti files, if necessary
-    nifti_files = retrieve_nifti(brainmaps,retrieve)
+    nifti_files = retrieve_nifti(peaks,retrieve,"statmap_location")
 
     if view_in_browser==True:
-        tmp_nifti_files,copy_list = generate_temp(nifti_files)
+        peaks,copy_list = generate_temp(peaks,"statmap_location")
         if base_image == None:
             base_image = get_standard_brain(load=False)
-            tmp_base_image,base_copy = generate_temp({base_image: {base_image:base_image}})
+            dummy_peak = {ttl_file: {"statmap_location":base_image}}
+            ~,base_copy = generate_temp(dummy_peak,"statmap_location")
             copy_list.update(base_copy)
             base_image = base_copy.values()[0]
-        template = add_string("[SUB_BRAINMAPS_SUB]",str(tmp_nifti_files),template)
+        
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
+        template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
+        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap_filename",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         view(template,copy_list,port)
@@ -94,8 +95,9 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     else:
         if base_image == None:
             base_image = get_standard_brain(load=False)
-        template = add_string("[SUB_BRAINMAPS_SUB]",str(nifti_files),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
+        template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
+        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap_filename",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         return template
@@ -118,14 +120,11 @@ def parse_nidm(ttl_files):
         filename and location for all brain maps specified in ttl.
     '''
     peaks = dict()
-    maps = dict()
     for n in range(len(ttl_files)):
         ttl_file = os.path.abspath(ttl_files[n])
-        df = get_coordinates(ttl_file)
-        brainmaps = get_brainmaps(ttl_file)
+        df = get_coordinates_and_maps(ttl_file)
         peaks[ttl_file] = df
-        maps[ttl_file] = brainmaps
-    return peaks,maps
+    return peaks
 
 
 def to_dictionary(df,orient="records",strip_columns=False,strings=False):
@@ -152,36 +151,35 @@ def to_dictionary(df,orient="records",strip_columns=False,strings=False):
     else:
         return df.to_dict(orient=orient)
 
-def retrieve_nifti(maps,retrieve):
+def retrieve_nifti(peaks,retrieve,location_key):
     '''retrieve_nifti
     Download the image to a temporary folder if the user needs to
     retrieve it. Otherwise, return file
     Parameters
     ==========
-    maps: dict
+    peaks: dict
         dictionary (key, is ttl_file, and value, is dictionary of {filename:fullpath}
         for all brainmaps extracted from the ttl files
     retrieve: boolean
-    if True, will download brainmaps to temporary folder first. If false, encodes
-    path in utf-8 for rendering in javascript
+        if True, will download brainmaps to temporary folder first. If false, encodes
+        path in utf-8 for rendering in javascript
+    location_key: str
+        key to look up file name in peaks dictionary
     '''
     # Note: retrieve = True has not been tested!
-    map_paths = dict()
-    for nidm,maplist in maps.iteritems():
+    updated_peaks = dict()
+    for nidm,entries in peaks.iteritems():
         if retrieve:
-            single_maps = dict()
-            for brainmap_id,brainmap in maplist.iteritems():
-                image_ext = get_extension(brainmap)
-                temp_path = get_random_name()
-                temp_image_path = "%s.%s" %(temp_path,image_ext)
-                if download_file(brainmap,temp_image_path):
-                    single_maps[strip_url(brainmap_id)] = temp_image_path
-        else:
-            single_maps = dict()
-            for brainmap_id,brainmap in maplist.iteritems():
-                single_maps[strip_url(brainmap_id)] = brainmap.encode("utf-8") 
-        map_paths[nidm] = single_maps
-    return map_paths
+            for e in range(len(entries)):
+                if location_key in entries[e]:
+                    brainmap = entries[e][location_key]
+                    image_ext = get_extension(brainmap)
+                    temp_path = get_random_name()
+                    temp_image_path = "%s.%s" %(temp_path,image_ext)
+                    if download_file(brainmap,temp_image_path):
+                        entries[e][location_key] = temp_image_path
+        updated_peaks[nidm] = entries
+    return updated_peaks
 
 
 def get_column_names(peaks):
@@ -191,38 +189,40 @@ def get_column_names(peaks):
     return column_names
 
 
-def generate_temp(nifti_files):
+def generate_temp(peaks,location_key):
     '''generate_temp
     generate a lookup of temporary files
     Parameters
     ==========
-    nifti_files: dictionary 
-        (key is ttl file, value is dictionary of nifti files {filename:fullpath}
+    peaks: dict
+       data structure from get_coordinates_and_peaks
+    location_key: str
+       key in peaks data structure for file paths
     Returns
     =======
-    new_nifti_files: dict
-        (key is ttl file, value is dictionary of nifti files {filename:fullpath}
-        equivalent files but without path as all files will go in same level
-        of the temporary directory
+    peaks: dict
+        (key is ttl file, equivalent to peaks, but old location_key path is replaced
+        with path to temporary directory
     copy_list: dict
         keys are current paths, values are temporary file names corresponding to
         fullpath in new_nifti_files[ttl_file] dictionary. This is used to copy
         images into the temporary directory with the correct names. 
     '''
-    new_nifti_files = dict()
+    updated_peaks = dict()
     copy_list = dict()
-    for nidm_file,maplist in nifti_files.iteritems():
-        nidm_directory = os.path.dirname(nidm_file)
-        single_maps = dict()
-        for brainmap_id,brainmap in maplist.iteritems():
-            brainmap_base = os.path.basename(brainmap)
-            image_ext = get_extension(brainmap)
-            temp_path = get_random_name()
-            temp_image_path = "%s.%s" %(temp_path,image_ext)
-            single_maps[strip_url(brainmap_id)] = temp_image_path
-            copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
-        new_nifti_files[nidm_file] = single_maps
-    return new_nifti_files,copy_list      
+    for nidm,entries in peaks.iteritems():
+        nidm_directory = os.path.dirname(nidm)
+        for e in range(len(entries)):
+            if location_key in entries[e]:
+                brainmap = entries[e][location_key]
+                brainmap_base = os.path.basename(brainmap)
+                image_ext = get_extension(brainmap)
+                temp_path = get_random_name()
+                temp_image_path = "%s.%s" %(temp_path,image_ext)
+                entries[e][location_key] = temp_image_path              
+                copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
+        updated_peaks[nidm] = entries
+    return updated_peaks,copy_list 
 
 
 def check_inputs(ttl_files):

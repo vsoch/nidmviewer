@@ -23,43 +23,36 @@ function export_svg() {
 
 }
 
-function load_images(brainmaps){
+function load_nidm(nidm_file){
 
-    // Generate initial table, and buttons for nidm
-    image_files =  [];
-    image_names = [];
-    for (var brainmap in brainmaps) {
-	if (brainmaps.hasOwnProperty(brainmap)) {
-	    image_files.push(brainmaps[brainmap].replace("file://","").replace("./",""))
-            var image_name = brainmap.split("/");
-            image_name = image_name[image_name.length-1]
-	    image_names.push(image_name)
-        }
-     }
-
+    peak_table = peaks[nidm_file];
+    nidm = nidm_file;
 
     // Add image buttons at the top
     $("#nidm_images").empty()
-    for (i=0; i < image_files.length; i++) {
-        image_file = image_files[i] 
-        image_name = image_names[i].replace(".nii.gz","").replace(".nii","")
-        $("#nidm_images").append('<li><a href="#" onclick=viewimage(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
+    for (i=0; i < peak_table.length; i++) {
+        image_file = peak_table[i][location_key]
+        image_name = peak_table[i][filename_key] 
+        image_name = image_names.replace(".nii.gz","").replace(".nii","")
+        $("#nidm_images").append('<li><a href="#" onclick=view_nidm(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
     }
     
+    // Set column names specific to nidm file
+    columns = column_names[nidm_file]
+
     // Load the first map, whatever it is
-    file = image_files[0]
-    setTimeout(function(){
-        viewimage(file)
-    },500);
+    view_nidm(peak_table[0][location_key])
     
 }
 
-function view_nidm(nidm_file){
+function view_nidm(image_filename){
 
    // Load the table
-   nidm_table(peaks[nidm_file])
+   nidm_table(image_filename)
 
-   // Load the images
-   load_images(brain_images[nidm_file])
+   // Update the image
+   setTimeout(function(){
+        viewimage(image_filename)
+   },500);
 
 }

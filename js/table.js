@@ -1,7 +1,9 @@
 // Create tables dynamically for nidm results
 
-function nidm_table(data,columns) {
+function nidm_table(image_filename) {
            
+    data = peaks[nidm]
+
     $("#papayaContainer0").css("padding-left","0px")     
 
     var tablehtml = '<div class="fresh-table full-color-blue"><output id="list"></output><div class="toolbar"><button id="export" class="btn btn-default">Export SVG</button></div><table id="fresh-table" class="table"><thead>'
@@ -20,6 +22,9 @@ function nidm_table(data,columns) {
     for(var i=0; i<data.length; i++) {
         result = data[i]           
 
+        // Only add data for image selected
+        if (result[filename_key] == image_filename){
+
         // Start a new row
         tablehtml = tablehtml + '<tr style="background-color:none">'
 
@@ -33,6 +38,8 @@ function nidm_table(data,columns) {
         }
 
         tablehtml = tablehtml + '<td><button class="btn btn-default circle" style="padding:2px" onclick=move_coordinate(' + result["x"] + ',' + result["y"] + ',' + result["z"] + ')><i class="fb icon-crosshair"></i></button></td></tr>'
+
+        }
     
     }  
 
