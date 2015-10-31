@@ -23,17 +23,37 @@ function export_svg() {
 
 }
 
+function unique(arr) {
+    var u = {}, a = [];
+    for(var i = 0, l = arr.length; i < l; ++i){
+        if(!u.hasOwnProperty(arr[i])) {
+            a.push(arr[i]);
+            u[arr[i]] = 1;
+        }
+    }
+    return a;
+}
+
+
 function load_nidm(nidm_file){
 
-    peak_table = peaks[nidm_file];
-    nidm = nidm_file;
+    peak_table = peaks[nidm_file]
+    nidm = nidm_file
+    image_files = []
+    image_names = []
+    for (i=0; i < peak_table.length; i++) {
+        image_file = peak_table[i][location_key]
+        image_files.push(image_file)
+        image_names.push(image_file.replace(".nii.gz","").replace(".nii","")) 
+    }
+    image_files = unique(image_files)
+    image_names = unique(image_names)
 
     // Add image buttons at the top
     $("#nidm_images").empty()
-    for (i=0; i < peak_table.length; i++) {
-        image_file = peak_table[i][location_key]
-        image_name = peak_table[i][filename_key] 
-        image_name = image_name.replace(".nii.gz","").replace(".nii","")
+    for (i=0; i < image_files.length; i++) {
+        image_file = image_files[i]
+        image_name = image_names[i] 
         $("#nidm_images").append('<li><a href="#" onclick=view_nidm(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
     }
     
@@ -41,7 +61,7 @@ function load_nidm(nidm_file){
     columns = column_names[nidm_file]
 
     // Load the first map, whatever it is
-    view_nidm(peak_table[0][location_key])
+    view_nidm(image_files[0])
     
 }
 
