@@ -11,19 +11,22 @@
 <!--[TAG_PAPAYACSS_TAG]--><link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/papaya.css" /> <!--version=0.8&build=910-->
 <!--[TAG_PAPAYAJS_TAG]--><script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/papaya.js"></script> <!--version=0.8&build=910,beta-->
 
-    <div class="row">
-    <!-- Buttons! -->
+<div class="row">
+
+        <!-- Buttons! -->
         <div id="button_zone">
+
             <div class="float-left-wrapper">
+
                 <!-- NIDM Selection -->
                 <button class="btn btn-default">
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
-                        <ul class="dropdown-menu" id="nidm_selection">
-                        </ul>
+                            <ul class="dropdown-menu" id="nidm_selection">
+                            </ul>
                     </li>
                 </button>
-                <!-- View image buttons will be appended here -->
+                <!-- View image buttons wioad_imagesl be appended here -->
                 <button class="btn btn-default">
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
@@ -31,17 +34,22 @@
                             </ul>
                     </li>
                 </button>
+
             </div>
+
             <div class="float-right-wrapper">
+
                 <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
                     <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
                 </a>
         </div>
-    </div>
-    <div class="row">
+     </div>
+
+<div class="row">
 
     <!-- Left sidebar region for tables -->
     <div id="bluetable" class="col-md-6">
+
         <!-- Tables for nidm will be dynamically rendered here -->
         <div class="row" id="tablerow">
         </div>
@@ -49,15 +57,16 @@
 
     <!-- Papaya viewer window -->
     <div id="pappy" class="col-md-6">
+
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.js"></script>
     <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
     <script type="text/javascript">
 
-     var brain_images = [SUB_BRAINMAPS_SUB];
      var peaks = [SUB_PEAKS_SUB];
+     filename_key = "[SUB_FILENAMEKEY_SUB]";
+     location_key = "[SUB_FILELOCATIONKEY_SUB]";
      var column_names = [SUB_COLUMNS_SUB];
-
 
      var cx;
      var params = [];
@@ -118,27 +127,31 @@ function viewimage(file) {
 </div>
 
 
-<script type="text/javascript">        
-    $().ready(function(){
-        // Generate initial table, and buttons for nidm
-	nidm_files = []
-	for (var nidm in peaks) {
-	    if (peaks.hasOwnProperty(nidm)) {
-                nidm_files.push(nidm)
-                console.log(nidm);
-                $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
-             }
-	}
+    <script type="text/javascript">        
+            
+        $().ready(function(){
 
-	// Generate a table with the first nidm file     
-	nidm_table(peaks[nidm_files[0]],column_names[nidm_files[0]])
+	     // Generate initial table, and buttons for nidm
+	     nidm_files = []
+	     for (var nidm in peaks) {
+		 if (peaks.hasOwnProperty(nidm)) {
+		     nidm_files.push(nidm)
+                     console.log(nidm);
+                     $("#nidm_selection").append("<li><a href='#' onclick=load_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+		 }
+	     }
 
-        // Load first brain image into the viewer
-        load_images(brain_images[nidm_files[0]])
-        $('.dropdown-toggle').dropdown()
+             // Load first nidm into viewer
+             nidm = nidm_files[0]
+             load_nidm(nidm)
+             $('.dropdown-toggle').dropdown()
 
-});
+         });
+
        
+    </script>
+
+<script>
 $(function () {
     $(".search").css("width","160px")
     $('button[name=toggle]').css("height","40px")
