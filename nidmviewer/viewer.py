@@ -4,7 +4,7 @@ viewer.py: part of the nidmviewer package
 '''
 from nidmviewer.utils import strip_url, get_random_name, get_extension, download_file, get_standard_brain
 from nidmviewer.templates import get_template, add_string, save_template, remove_resources
-from nidmviewer.sparql import get_coordinates, get_brainmaps
+from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
 import os
@@ -53,10 +53,6 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     # Parse each nidm file
     peaks = parse_nidm(ttl_files)
 
-    # if the user wants to remove columns
-    if columns_to_remove != None:
-        peaks = remove_columns(peaks,columns_to_remove)
-
     # Convert coordinates from '[x,y,z]' to [x],[y],[z]
     for nidm,peak in peaks.iteritems():
         coordinates = parse_coordinates(peak.coordinate.tolist())
@@ -69,6 +65,10 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     # Grab the column names, it could be different for each ttl
     column_names = get_column_names(peaks)
 
+    # if the user wants to remove columns
+    if columns_to_remove != None:
+        column_names = remove_columns(column_names,columns_to_remove)
+
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():
         peaks[nidm] = to_dictionary(peak,strings=True)    
@@ -80,8 +80,8 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         peaks,copy_list = generate_temp(peaks,"statmap_location")
         if base_image == None:
             base_image = get_standard_brain(load=False)
-            dummy_peak = {ttl_file: {"statmap_location":base_image}}
-            ~,base_copy = generate_temp(dummy_peak,"statmap_location")
+            dummy_peak = {base_image: [{"statmap_location":base_image}]}
+            junk,base_copy = generate_temp(dummy_peak,"statmap_location")
             copy_list.update(base_copy)
             base_image = base_copy.values()[0]
         
@@ -208,7 +208,6 @@ def generate_temp(peaks,location_key):
         fullpath in new_nifti_files[ttl_file] dictionary. This is used to copy
         images into the temporary directory with the correct names. 
     '''
-    updated_peaks = dict()
     copy_list = dict()
     for nidm,entries in peaks.iteritems():
         nidm_directory = os.path.dirname(nidm)
@@ -216,12 +215,23 @@ def generate_temp(peaks,location_key):
             if location_key in entries[e]:
                 brainmap = entries[e][location_key]
                 brainmap_base = os.path.basename(brainmap)
-                image_ext = get_extension(brainmap)
-                temp_path = get_random_name()
-                temp_image_path = "%s.%s" %(temp_path,image_ext)
-                entries[e][location_key] = temp_image_path              
-                copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
+                if "%s/%s" %(nidm_directory,brainmap_base) not in copy_list:
+                    image_ext = get_extension(brainmap)
+                    temp_path = get_random_name()
+                    temp_image_path = "%s.%s" %(temp_path,image_ext)
+                    copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
+
+    updated_peaks = dict()
+
+    for nidm,entries in peaks.iteritems():
+        nidm_directory = os.path.dirname(nidm)
+        for e in range(len(entries)):
+            if location_key in entries[e]:
+                brainmap = entries[e][location_key]
+                brainmap_base = os.path.basename(brainmap)
+                entries[e][location_key] = copy_list["%s/%s" %(nidm_directory,brainmap_base)]              
         updated_peaks[nidm] = entries
+
     return updated_peaks,copy_list 
 
 
@@ -240,11 +250,8 @@ def check_inputs(ttl_files):
     if isinstance(ttl_files,str): ttl_files = [ttl_files]
     return ttl_files
 
-def remove_columns(peaks,columns_to_remove):
-    newpeaks = dict()
-    for nidm,df in peaks.iteritems():
-        for column_name in columns_to_remove:
-            if column_name in df:
-                df = df.drop(column_name,axis=1)
-        newpeaks[nidm] = df
-    return newpeaks
+def remove_columns(columns,columns_to_remove):
+    new_columns = dict()
+    for nidm,column_names in columns.iteritems():
+        new_columns[nidm] = [x for x in column_names if x not in columns_to_remove]        
+    return new_columns

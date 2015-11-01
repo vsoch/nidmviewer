@@ -4,7 +4,7 @@ from nidmviewer.viewer import generate
 from glob import glob
 import os
 
-# These examples are for running the viewer from within python. You can achieve
+# These examples are for generating code for the viewer from within python. You can achieve
 # the local browser version by running from the command line:
 
 # nidmviewer  fsl/nidm.ttl
@@ -15,6 +15,3 @@ import os
 # Each ttl file must be matched with a provn file, in the case of different versions
 ttl_files = glob("fsl/*.ttl")
 html_snippet = generate(ttl_files=ttl_files)
-
-# LOCAL BROWSER ##########################################################
-httpd = generate(ttl_files=nidm_files,base_image=standard_brain,view_in_browser=True)

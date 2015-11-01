@@ -73,6 +73,6 @@ function view_nidm(image_filename){
    // Update the image
    setTimeout(function(){
         viewimage(image_filename)
-   },500);
+   },1000);
 
 }

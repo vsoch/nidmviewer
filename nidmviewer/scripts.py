@@ -18,7 +18,7 @@ def main():
     parser.add_argument("ttl", help="List of comma separated ttl files to parse.", type=str)
     parser.add_argument("--base", help="base image (standard brain map) to use for the viewer background.",type=str)
     parser.add_argument("--port", help="PORT to use to serve nidmviewer (default 8088).",type=int)
-    parser.add_argument("--columns_to_remove", help="Comma separated list of columns to remove from viewer.",type=str,default=None)
+    parser.add_argument("--columns_to_remove", help="Comma separated list of columns to remove from viewer.",type=str,default="statmap_filename,statmap_location,statmap_type")
  
     try:
         args = parser.parse_args()

@@ -34,7 +34,7 @@
                                 </ul>
                         </li>
                     </button>
-                    <!-- View image buttons will be appended here -->
+                    <!-- View image buttons wioad_imagesl be appended here -->
                     <button class="btn btn-default">
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
@@ -73,6 +73,8 @@
     <script type="text/javascript">
 
      var peaks = [SUB_PEAKS_SUB];
+     filename_key = "[SUB_FILENAMEKEY_SUB]";
+     location_key = "[SUB_FILELOCATIONKEY_SUB]";
      var column_names = [SUB_COLUMNS_SUB];
 
      var cx;
@@ -144,15 +146,13 @@ function viewimage(file) {
 		 if (peaks.hasOwnProperty(nidm)) {
 		     nidm_files.push(nidm)
                      console.log(nidm);
-                     $("#nidm_selection").append("<li><a href='#' onclick=view_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+                     $("#nidm_selection").append("<li><a href='#' onclick=load_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
 		 }
 	     }
 
-	     // Generate a table with the first nidm file     
-	     nidm_table(peaks[nidm_files[0]],column_names[nidm_files[0]])
-
-             // Load first brain image into the viewer
-             load_images(brain_images[nidm_files[0]])
+             // Load first nidm into viewer
+             nidm = nidm_files[0]
+             load_nidm(nidm)
              $('.dropdown-toggle').dropdown()
 
          });
