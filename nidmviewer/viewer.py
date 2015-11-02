@@ -87,7 +87,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
-        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap_filename",template)
+        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         view(template,copy_list,port)
@@ -97,7 +97,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
             base_image = get_standard_brain(load=False)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
-        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap_filename",template)
+        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         return template
