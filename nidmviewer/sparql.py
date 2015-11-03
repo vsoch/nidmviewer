@@ -68,7 +68,7 @@ def get_coordinates_and_maps(ttl_file):
             prefix pvalue_uncorrected: <http://purl.org/nidash/nidm#NIDM_0000116>
             prefix statistic_map: <http://purl.org/nidash/nidm#NIDM_0000076>
             prefix statistic_type: <http://purl.org/nidash/nidm#NIDM_0000123>
-            SELECT DISTINCT ?statmap ?statmap_location ?statmap_type ?z_score ?pvalue_uncorrected ?coord_name ?coordinate
+            SELECT DISTINCT ?statmap ?statmap_location ?statmap_type ?z_score ?pvalue_uncorrected ?coordinate_id ?coord_name ?coordinate
             WHERE {
             ?statmap a statistic_map: ;
             statistic_type: ?statmap_type ;
