@@ -75,7 +75,7 @@ def get_coordinates_and_maps(ttl_file):
             prov:atLocation ?statmap_location .
             ?inference prov:used ?statmap .
             ?excursion_set_map prov:wasGeneratedBy ?inference .
-            ?sig_cluster prov:wasDerivedFrom ?excusion_set_map .
+            ?sig_cluster prov:wasDerivedFrom ?excursion_set_map .
             ?peak prov:wasDerivedFrom ?sig_cluster ;
             prov:atLocation ?coord ;
             equivalent_zstatistic: ?z_score ;
