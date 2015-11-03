@@ -114,12 +114,14 @@ function nidm_table(image_file) {
             values: [row.id]
             });   
            }
-        };
+     };
             
-        $exportBtn.attr("onclick","export_svg()")
+     $exportBtn.attr("onclick","export_svg()")
             
-        $(window).resize(function () {
-           $table.bootstrapTable('resetView');
-        });    
+     $(window).resize(function () {
+        $table.bootstrapTable('resetView');
+     });    
  
+     $("#export").css("margin-left",30)
+
 }
