@@ -71,19 +71,15 @@ def get_coordinates_and_maps(ttl_file):
             SELECT DISTINCT ?statmap ?statmap_location ?statmap_type ?z_score ?pvalue_uncorrected ?coordinate_id ?coord_name ?coordinate
             WHERE {
             ?statmap a statistic_map: ;
-            statistic_type: ?statmap_type ;
-            prov:atLocation ?statmap_location .
-            ?inference prov:used ?statmap .
-            ?excursion_set_map prov:wasGeneratedBy ?inference .
-            ?sig_cluster prov:wasDerivedFrom ?excursion_set_map .
-            ?peak prov:wasDerivedFrom ?sig_cluster ;
-            prov:atLocation ?coord ;
-            equivalent_zstatistic: ?z_score ;
-            rdfs:label ?peak_name ;
-            pvalue_uncorrected: ?pvalue_uncorrected .
-            ?peak prov:atLocation ?coordinate_id .
+                statistic_type: ?statmap_type ;
+                prov:atLocation ?statmap_location .
+            ?peak prov:wasDerivedFrom/prov:wasDerivedFrom/prov:wasGeneratedBy/prov:used ?statmap ;
+                prov:atLocation ?coord ;
+                equivalent_zstatistic: ?z_score ;
+                pvalue_uncorrected: ?pvalue_uncorrected ;
+                prov:atLocation ?coordinate_id .
             ?coordinate_id rdfs:label ?coord_name ;
-            coordinate: ?coordinate .
+                coordinate: ?coordinate .
             }
             """
     return do_query(ttl_file,query)
