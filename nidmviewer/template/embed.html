@@ -18,18 +18,19 @@
 
             <div class="float-left-wrapper">
 
-                <!-- NIDM Selection -->
-                <button class="btn btn-default">
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
-                            <ul class="dropdown-menu" id="nidm_selection">
-                            </ul>
-                    </li>
-                </button>
+<!-- NIDM Selection -->
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><button class="btn btn-default">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><li class="dropdown">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><ul class="dropdown-menu" id="nidm_selection">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></ul>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></li>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></button>
+
                 <!-- View image buttons wioad_imagesl be appended here -->
                 <button class="btn btn-default">
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">[SUB_BUTTONTEXT_SUB] <i class="fb icon-sagittal"></i><b class="caret"></b></a>
                             <ul class="dropdown-menu" id="nidm_images">
                             </ul>
                     </li>
@@ -137,7 +138,7 @@ function viewimage(file) {
 		 if (peaks.hasOwnProperty(nidm)) {
 		     nidm_files.push(nidm)
                      console.log(nidm);
-                     $("#nidm_selection").append("<li><a href='#' onclick=load_nidm(\""+ nidm +"\")>" + nidm + "</a></li>")
+                     $("#nidm_selection").append("<li><a href='#' onclick=load_nidm(\""+ nidm +"\")>" + nidm + "</a></li>") //[TAG_NIDMSELECTBUTTON_TAG]
 		 }
 	     }
 

@@ -12,7 +12,7 @@ import sys
 
 
 def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,columns_to_remove=None,
-             template_choice="index",port=None,remove_scripts=None):
+             template_choice="index",port=None,remove_scripts=None,button_text="BRAIN"):
     '''generate
     will generate a nidmviewer to run locally or to embed into webserver
     Parameters
@@ -34,8 +34,11 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     port: int
         port to serve nidmviewer, if view_in_browser==True
     remove_scripts: list
-        one or more script tags to remove from the template. Options include
-        JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS
+        one or more script or button tags to remove from the template. Options include
+        JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS NIDMSELECTBUTTON
+    button_text: str
+        Text string for the button to select a brain image. Default is "BRAIN"
+
     '''
 
     # Check inputs and prepare template        
@@ -76,6 +79,11 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     # Retrieve nifti files, if necessary
     nifti_files = retrieve_nifti(peaks,retrieve,"statmap_location")
 
+    template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
+    template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
+    template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
+    template = add_string("[SUB_BUTTONTEXT_SUB]",button_text,template)
+
     if view_in_browser==True:
         peaks,copy_list = generate_temp(peaks,"statmap_location")
         if base_image == None:
@@ -86,20 +94,14 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
             base_image = base_copy.values()[0]
         
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
-        template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
-        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
-        template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         view(template,copy_list,port)
 
     else:
         if base_image == None:
             base_image = get_standard_brain(load=False)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
-        template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
-        template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
-        template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
         return template
 
 
