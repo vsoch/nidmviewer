@@ -31,6 +31,8 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         open a temporary web browser (to run locally). If True, images will be copied
         to a temp folder. If False, image_paths must be relative to web server. File names 
         should be unique.
+    columns_to_remove: additional columns to remove. If none, default columns of "coordinate_id"
+        "statmap_type" and "exc_set" will be removed.
     port: int
         port to serve nidmviewer, if view_in_browser==True
     remove_scripts: list
@@ -69,8 +71,12 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     column_names = get_column_names(peaks)
 
     # if the user wants to remove columns
+    columns = ["coordinate_id","exc_set","statmap_type"]
     if columns_to_remove != None:
-        column_names = remove_columns(column_names,columns_to_remove)
+        if isinstance(columns_to_remove,str):
+            columns_to_remove = [columns_to_remove]
+        columns = columns_to_remove + columns
+        column_names = remove_columns(column_names,columns)
 
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():

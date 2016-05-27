@@ -10,7 +10,7 @@ from pandas import DataFrame
 
 '''
 sparql.py: part of the nidmviewer package
-Sparwl queries
+Sparql queries
 
 '''
 
@@ -19,15 +19,14 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
     g.parse(ttl_file,format=rdf_format)
     result = g.query(query)   
     if result is None:
-        print "No RESULTS ---"
+        print "No results matching query."
     else:
-        print "RESULTS !!!"
-    result = result.serialize(format=serialize_format)    
-    if output_df == True:
-        result = StringIO(result)
-        return DataFrame.from_csv(result,sep=",")
-    else:
-        return result
+        print "Found results matching query."
+        result = result.serialize(format=serialize_format)    
+        if output_df == True:
+            result = StringIO(result)
+            return DataFrame.from_csv(result,sep=",")
+    return result
 
 def get_coordinates(ttl_file):
     query = """
