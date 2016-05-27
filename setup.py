@@ -8,6 +8,10 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+# Get requirements from requirements.txt file
+reqs = [line.strip() for line in open('requirements.txt').readlines()]
+requirements = list(filter(None, reqs))
+
 setup(
     # Application name:
     name="nidmviewer",
@@ -34,7 +38,7 @@ setup(
     long_description=long_description,
     keywords='nidm nidm-results brain imaging neuroimaging',
 
-    install_requires = ['numpy','rdflib', 'rdfextras', 'rdflib-jsonld'],
+    install_requires = requirements,
 
     entry_points = {
         'console_scripts': [
