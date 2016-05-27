@@ -2,4 +2,4 @@ numpy
 rdflib
 rdfextras
 rdflib-jsonld
-pandas>=0.18.1
+pandas
