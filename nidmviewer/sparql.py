@@ -73,6 +73,7 @@ def get_coordinates_and_maps(ttl_file):
             ?statmap a statistic_map: ;
                 statistic_type: ?statmap_type ;
                 prov:atLocation ?statmap_location .
+            OPTIONAL {
             ?peak prov:wasDerivedFrom/prov:wasDerivedFrom/prov:wasGeneratedBy/prov:used ?statmap ;
                 prov:atLocation ?coord ;
                 equivalent_zstatistic: ?z_score ;
@@ -80,6 +81,7 @@ def get_coordinates_and_maps(ttl_file):
                 prov:atLocation ?coordinate_id .
             ?coordinate_id rdfs:label ?coord_name ;
                 coordinate: ?coordinate .
+                }
             }
             """
     return do_query(ttl_file,query)
