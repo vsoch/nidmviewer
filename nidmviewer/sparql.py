@@ -40,19 +40,6 @@ def get_coordinates(ttl_file):
     return do_query(ttl_file,query)
 
 
-def get_brainmaps(ttl_file):
-    query = """
-            PREFIX nidm: <http://purl.org/nidash/nidm#> 
-            PREFIX prov: <http://www.w3.org/ns/prov#> 
-            prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
-            SELECT ?filename ?location WHERE 
-            { ?file prov:atLocation ?location . 
-            ?file nfo:fileName ?filename .
-            FILTER regex(?filename, "TS*")
-            }
-            """
-    return do_query(ttl_file,query)
-
 def get_coordinates_and_maps(ttl_file):
     query = """
             PREFIX nidm: <http://purl.org/nidash/nidm#>
