@@ -77,19 +77,19 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         peaks[nidm] = to_dictionary(peak,strings=True)    
 
     # Retrieve nifti files, if necessary
-    nifti_files = retrieve_nifti(peaks,retrieve,"statmap_location")
+    nifti_files = retrieve_nifti(peaks,retrieve,"excsetmap_location")
 
-    template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
+    template = add_string("[SUB_FILELOCATIONKEY_SUB]","excsetmap_location",template)
     template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
     template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
     template = add_string("[SUB_BUTTONTEXT_SUB]",button_text,template)
 
     if view_in_browser==True:
-        peaks,copy_list = generate_temp(peaks,"statmap_location")
+        peaks,copy_list = generate_temp(peaks,"excsetmap_location")
         if base_image == None:
             base_image = get_standard_brain(load=False)
-            dummy_peak = {base_image: [{"statmap_location":base_image}]}
-            junk,base_copy = generate_temp(dummy_peak,"statmap_location")
+            dummy_peak = {base_image: [{"excsetmap_location":base_image}]}
+            junk,base_copy = generate_temp(dummy_peak,"excsetmap_location")
             copy_list.update(base_copy)
             base_image = base_copy.values()[0]
         

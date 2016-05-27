@@ -18,6 +18,10 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
     g = rdflib.Graph()
     g.parse(ttl_file,format=rdf_format)
     result = g.query(query)   
+    if result is None:
+        print "No RESULTS ---"
+    else:
+        print "RESULTS !!!"
     result = result.serialize(format=serialize_format)    
     if output_df == True:
         result = StringIO(result)
@@ -55,11 +59,15 @@ def get_coordinates_and_maps(ttl_file):
             prefix pvalue_uncorrected: <http://purl.org/nidash/nidm#NIDM_0000116>
             prefix statistic_map: <http://purl.org/nidash/nidm#NIDM_0000076>
             prefix statistic_type: <http://purl.org/nidash/nidm#NIDM_0000123>
-            SELECT DISTINCT ?statmap ?statmap_location ?statmap_type ?z_score ?pvalue_uncorrected ?coordinate_id ?coord_name ?coordinate
+            prefix nidm_ExcursionSetMap: <http://purl.org/nidash/nidm#NIDM_0000025>
+            SELECT DISTINCT ?statmap ?excsetmap_location ?statmap_type ?z_score 
+            ?pvalue_uncorrected ?coordinate_id ?coord_name ?coordinate ?exc_set
             WHERE {
             ?statmap a statistic_map: ;
-                statistic_type: ?statmap_type ;
-                prov:atLocation ?statmap_location .
+                statistic_type: ?statmap_type .
+            ?exc_set a nidm_ExcursionSetMap: ;
+                prov:wasGeneratedBy/prov:used ?statmap ;
+                prov:atLocation ?excsetmap_location .
             OPTIONAL {
             ?peak prov:wasDerivedFrom/prov:wasDerivedFrom/prov:wasGeneratedBy/prov:used ?statmap ;
                 prov:atLocation ?coord ;
