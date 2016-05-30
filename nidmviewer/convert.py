@@ -25,7 +25,11 @@ def parse_coordinates(coordinates):
     count=0
     coordinate_df = pandas.DataFrame(columns=["x","y","z"])
     for coordinate in coordinates:
-        coordinate_df.loc[count] = [x.strip() for x in coordinate.strip("]").strip("[").split(",")]
+        if isinstance(coordinate, str):
+            coordinate_df.loc[count] = [x.strip() for x in coordinate.strip("]").strip("[").split(",")]
+        # This happens when there are no coordinates
+        elif isinstance(coordinate, float64) and isnan(coordinate):
+            coordinate_df.loc[count] = [None, None, None]
         count+=1
     return coordinate_df
 

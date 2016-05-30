@@ -7,6 +7,8 @@ from nidmviewer.templates import get_template, add_string, save_template, remove
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
+import nibabel as nib
+import numpy as np
 import os
 import sys
 
@@ -92,6 +94,16 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
 
     if view_in_browser==True:
         peaks,copy_list = generate_temp(peaks,"excsetmap_location")
+        # Check if the nifti is empty
+        for exc_set_file in copy_list.keys():
+            img = nib.load(exc_set_file)
+            data = img.get_data()
+            data = np.nan_to_num(data)
+            if np.count_nonzero(data) == 0:
+                # Empty excursion set is removed from the display list
+                del copy_list[exc_set_file]
+                peaks[peaks.keys()[0]] = {}
+
         if base_image == None:
             base_image = get_standard_brain(load=False)
             dummy_peak = {base_image: [{"excsetmap_location":base_image}]}
