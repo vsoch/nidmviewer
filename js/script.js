@@ -53,8 +53,16 @@ function load_nidm(nidm_file){
     $("#nidm_images").empty()
     for (i=0; i < image_files.length; i++) {
         image_file = image_files[i]
-        image_name = image_names[i] 
-        $("#nidm_images").append('<li><a href="#" onclick=view_nidm(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
+        image_name = image_names[i]
+        
+        // If image is not empty, clicking will show viewer and table
+        if (empty_images[image_file]==0){
+            $("#nidm_images").append('<li><a href="#" onclick=view_nidm(\'' + image_file + '\') id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
+
+        // Otherwise tell user no suprathreshold voxels
+        } else {
+            $("#nidm_images").append('<li><a href="#" onclick=alert_empty() id="' + image_name + '" title="' + image_name + '" alt="' + image_name + '">'+ image_name + '</a></li>');
+        }
     }
     
     // Set column names specific to nidm file
@@ -67,6 +75,11 @@ function load_nidm(nidm_file){
 
 function view_nidm(image_filename){
 
+   // Show viewer and table
+   $("#bluetable").removeClass("hidden")
+   $("#pappy").removeClass("hidden")
+   $("#empty").addClass("hidden")
+ 
    // Load the table
    nidm_table(image_filename)
 
@@ -75,4 +88,10 @@ function view_nidm(image_filename){
         viewimage(image_filename)
    },1000);
 
+}
+
+function alert_empty(){
+  $("#bluetable").addClass("hidden")
+  $("#pappy").addClass("hidden")
+  $("#empty").removeClass("hidden")
 }

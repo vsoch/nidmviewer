@@ -48,6 +48,11 @@
 
 <div class="row">
 
+    <!-- If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)-->
+    <div class="col-md-12" id="empty" style="position:relative;padding-left:300px;padding-top:70px" class="hidden">
+        <h1 style="color:white">No suprathreshold voxels</h1>
+    </div>
+
     <!-- Left sidebar region for tables -->
     <div id="bluetable" class="col-md-6">
 
@@ -68,6 +73,8 @@
      filename_key = "[SUB_FILENAMEKEY_SUB]";
      location_key = "[SUB_FILELOCATIONKEY_SUB]";
      var column_names = [SUB_COLUMNS_SUB];
+     var empty_images = [SUB_EMPTY_SUB];
+
 
      var cx;
      var params = [];

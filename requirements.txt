@@ -2,3 +2,4 @@ numpy
 rdflib
 rdfextras
 rdflib-jsonld
+pandas

@@ -7,6 +7,8 @@ from nidmviewer.templates import get_template, add_string, save_template, remove
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
+import nibabel
+import numpy
 import os
 import sys
 
@@ -31,6 +33,8 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         open a temporary web browser (to run locally). If True, images will be copied
         to a temp folder. If False, image_paths must be relative to web server. File names 
         should be unique.
+    columns_to_remove: additional columns to remove. If none, default columns of "coordinate_id"
+        "statmap_type" and "exc_set" will be removed.
     port: int
         port to serve nidmviewer, if view_in_browser==True
     remove_scripts: list
@@ -69,30 +73,46 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     column_names = get_column_names(peaks)
 
     # if the user wants to remove columns
+    columns = ["coordinate_id","exc_set","statmap_type"]
     if columns_to_remove != None:
-        column_names = remove_columns(column_names,columns_to_remove)
+        if isinstance(columns_to_remove,str):
+            columns_to_remove = [columns_to_remove]
+        columns = columns_to_remove + columns
+        column_names = remove_columns(column_names,columns)
 
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():
         peaks[nidm] = to_dictionary(peak,strings=True)    
 
     # Retrieve nifti files, if necessary
-    nifti_files = retrieve_nifti(peaks,retrieve,"statmap_location")
+    nifti_files = retrieve_nifti(peaks,retrieve,"excsetmap_location")
 
-    template = add_string("[SUB_FILELOCATIONKEY_SUB]","statmap_location",template)
+    template = add_string("[SUB_FILELOCATIONKEY_SUB]","excsetmap_location",template)
     template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
     template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
     template = add_string("[SUB_BUTTONTEXT_SUB]",button_text,template)
 
     if view_in_browser==True:
-        peaks,copy_list = generate_temp(peaks,"statmap_location")
+        peaks,copy_list = generate_temp(peaks,"excsetmap_location")
+
+        # If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)
+        empty_images = dict()
+        for exc_set_file,image_name in copy_list.iteritems():
+            nii = nibabel.load(exc_set_file)
+            data = nii.get_data()
+            data = numpy.nan_to_num(data)
+            empty_images[image_name] = 0
+            if numpy.count_nonzero(data) == 0:
+                empty_images[image_name] = 1
+
         if base_image == None:
             base_image = get_standard_brain(load=False)
-            dummy_peak = {base_image: [{"statmap_location":base_image}]}
-            junk,base_copy = generate_temp(dummy_peak,"statmap_location")
+            dummy_peak = {base_image: [{"excsetmap_location":base_image}]}
+            junk,base_copy = generate_temp(dummy_peak,"excsetmap_location")
             copy_list.update(base_copy)
             base_image = base_copy.values()[0]
         
+        template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         view(template,copy_list,port)
@@ -100,6 +120,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     else:
         if base_image == None:
             base_image = get_standard_brain(load=False)
+        template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         return template
