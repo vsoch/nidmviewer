@@ -7,8 +7,8 @@ from nidmviewer.templates import get_template, add_string, save_template, remove
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
-import nibabel as nib
-import numpy as np
+import nibabel
+import numpy
 import os
 import sys
 
@@ -94,15 +94,16 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
 
     if view_in_browser==True:
         peaks,copy_list = generate_temp(peaks,"excsetmap_location")
-        # Check if the nifti is empty
-        for exc_set_file in copy_list.keys():
-            img = nib.load(exc_set_file)
-            data = img.get_data()
-            data = np.nan_to_num(data)
-            if np.count_nonzero(data) == 0:
-                # Empty excursion set is removed from the display list
-                del copy_list[exc_set_file]
-                peaks[peaks.keys()[0]] = {}
+
+        # If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)
+        empty_images = dict()
+        for exc_set_file,image_name in copy_list.iteritems():
+            nii = nibabel.load(exc_set_file)
+            data = nii.get_data()
+            data = numpy.nan_to_num(data)
+            empty_images[image_name] = 0
+            if numpy.count_nonzero(data) == 0:
+                empty_images[image_name] = 1
 
         if base_image == None:
             base_image = get_standard_brain(load=False)
@@ -111,6 +112,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
             copy_list.update(base_copy)
             base_image = base_copy.values()[0]
         
+        template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         view(template,copy_list,port)
@@ -118,6 +120,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     else:
         if base_image == None:
             base_image = get_standard_brain(load=False)
+        template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
         return template
