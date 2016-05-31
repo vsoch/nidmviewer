@@ -250,17 +250,18 @@ def generate_temp(peaks,location_key):
 
     for nidm,entries in peaks.iteritems():
         nidm_directory = os.path.dirname(nidm)
-        to_delete = []
+        to_keep = []
         for e in range(len(entries)):
             if location_key in entries[e]:
                 brainmap = entries[e][location_key]
                 brainmap_base = os.path.basename(brainmap)
                 entries[e][location_key] = copy_list["%s/%s" %(nidm_directory,brainmap_base)]
-                if "x" not in entries[e]:
-                    to_delete.append(e)
+                if "x" in entries[e]:
+                    if entries[e]["x"] != "nan":
+                        to_keep.append(e)
 
         # Remove coordinates that are nan from the data frame
-        entries = [e for e in range(len(entries)) if e not in to_delete]
+        entries = [entries[e] for e in range(len(entries)) if e in to_keep]
         updated_peaks[nidm] = entries
 
     return updated_peaks,copy_list 
