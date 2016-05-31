@@ -9,6 +9,7 @@ from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
 import nibabel
 import numpy
+import pandas
 import os
 import sys
 
@@ -64,9 +65,10 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     for nidm,peak in peaks.iteritems():
         coordinates = parse_coordinates(peak.coordinate.tolist())
         peak = peak.drop("coordinate",axis=1)
-        peak["x"] = coordinates["x"].tolist()
-        peak["y"] = coordinates["y"].tolist()
-        peak["z"] = coordinates["z"].tolist()
+        if coordinates.shape[0] > 0:
+            peak["x"] = coordinates["x"].tolist()
+            peak["y"] = coordinates["y"].tolist()
+            peak["z"] = coordinates["z"].tolist()
         peaks[nidm] = peak
 
     # Grab the column names, it could be different for each ttl
@@ -83,7 +85,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():
         peaks[nidm] = to_dictionary(peak,strings=True)    
-
+ 
     # Retrieve nifti files, if necessary
     nifti_files = retrieve_nifti(peaks,retrieve,"excsetmap_location")
 
@@ -248,11 +250,17 @@ def generate_temp(peaks,location_key):
 
     for nidm,entries in peaks.iteritems():
         nidm_directory = os.path.dirname(nidm)
+        to_delete = []
         for e in range(len(entries)):
             if location_key in entries[e]:
                 brainmap = entries[e][location_key]
                 brainmap_base = os.path.basename(brainmap)
-                entries[e][location_key] = copy_list["%s/%s" %(nidm_directory,brainmap_base)]              
+                entries[e][location_key] = copy_list["%s/%s" %(nidm_directory,brainmap_base)]
+                if "x" not in entries[e]:
+                    to_delete.append(e)
+
+        # Remove coordinates that are nan from the data frame
+        entries = [e for e in range(len(entries)) if e not in to_delete]
         updated_peaks[nidm] = entries
 
     return updated_peaks,copy_list 

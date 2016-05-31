@@ -27,9 +27,8 @@ def parse_coordinates(coordinates):
     for coordinate in coordinates:
         if isinstance(coordinate, str):
             coordinate_df.loc[count] = [x.strip() for x in coordinate.strip("]").strip("[").split(",")]
-        # This happens when there are no coordinates
-        elif isinstance(coordinate, float64) and isnan(coordinate):
-            coordinate_df.loc[count] = [None, None, None]
+        else:
+            coordinate_df.loc[count] = [None,None,None]
         count+=1
     return coordinate_df
 
