@@ -2,14 +2,14 @@
 viewer.py: part of the nidmviewer package
 
 '''
-from nidmviewer.utils import strip_url, get_random_name, get_extension, download_file, get_standard_brain
+from nidmviewer.utils import strip_url, get_random_name, get_extension, \
+ download_file, get_standard_brain, is_empty, get_images
 from nidmviewer.templates import get_template, add_string, save_template, remove_resources
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
-import nibabel
-import numpy
 import pandas
+import numpy
 import os
 import sys
 
@@ -80,7 +80,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         if isinstance(columns_to_remove,str):
             columns_to_remove = [columns_to_remove]
         columns = columns_to_remove + columns
-        column_names = remove_columns(column_names,columns)
+    column_names = remove_columns(column_names,columns)
 
     # We want pandas df in the format of dict/json strings for javascript embed
     for nidm,peak in peaks.iteritems():
@@ -94,18 +94,14 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
     template = add_string("[SUB_BUTTONTEXT_SUB]",button_text,template)
 
+    # If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)
+    empty_images = dict()
+
     if view_in_browser==True:
         peaks,copy_list = generate_temp(peaks,"excsetmap_location")
 
-        # If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)
-        empty_images = dict()
         for exc_set_file,image_name in copy_list.iteritems():
-            nii = nibabel.load(exc_set_file)
-            data = nii.get_data()
-            data = numpy.nan_to_num(data)
-            empty_images[image_name] = 0
-            if numpy.count_nonzero(data) == 0:
-                empty_images[image_name] = 1
+            empty_images[image_name] = is_empty(exc_set_file)
 
         if base_image == None:
             base_image = get_standard_brain(load=False)
@@ -122,6 +118,11 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     else:
         if base_image == None:
             base_image = get_standard_brain(load=False)
+
+        image_files = get_images(peaks,"excsetmap_location")
+        for image_file in image_files:
+            empty_images[image_file] = is_empty(image_file)
+
         template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
         template = add_string("[SUB_BASEIMAGE_SUB]",str(base_image),template)
@@ -175,6 +176,7 @@ def to_dictionary(df,orient="records",strip_columns=False,strings=False):
         return df.to_dict().values() 
     else:
         return df.to_dict(orient=orient)
+
 
 def retrieve_nifti(peaks,retrieve,location_key):
     '''retrieve_nifti

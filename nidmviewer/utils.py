@@ -7,10 +7,12 @@ Functions to work with html templates
 import numpy as np
 import contextlib
 import tempfile
+import nibabel
 import zipfile
 import urllib
 import shutil
 import string
+import numpy
 import random
 import __init__
 import os
@@ -100,3 +102,26 @@ def get_standard_brain(load=True):
         return nib.load(brain)
     else:
         return brain
+
+# Check if nifti is empty
+def is_empty(nii_file):
+    nii = nibabel.load(nii_file)
+    data = nii.get_data()
+    data = numpy.nan_to_num(data)
+    if numpy.count_nonzero(data) == 0:
+        return 1
+    return 0
+
+def get_images(peaks,location_key):
+    '''get_images returns unique images for a location key from
+    a peaks table
+    '''
+    image_list = []
+    for nidm,entries in peaks.iteritems():
+        nidm_directory = os.path.dirname(nidm)
+        for e in range(len(entries)):
+            if location_key in entries[e]:
+                brainmap = entries[e][location_key]
+                if brainmap not in image_list:
+                    image_list.append(brainmap)
+    return image_list
