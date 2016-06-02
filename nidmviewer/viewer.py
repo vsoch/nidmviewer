@@ -202,7 +202,8 @@ def retrieve_nifti(peaks,retrieve,location_key):
                     brainmap = entries[e][location_key]
                     image_ext = get_extension(brainmap)
                     temp_path = get_random_name()
-                    temp_image_path = "%s.%s" %(temp_path,image_ext)
+                    temp_dir = tempfile.mkdtemp()
+                    temp_image_path = "%s/%s.%s" %(temp_dir,temp_path,image_ext)
                     if download_file(brainmap,temp_image_path):
                         entries[e][location_key] = temp_image_path
         updated_peaks[nidm] = entries
