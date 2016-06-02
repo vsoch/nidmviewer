@@ -87,7 +87,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         peaks[nidm] = to_dictionary(peak,strings=True)    
  
     # Retrieve nifti files, if necessary
-    nifti_files = retrieve_nifti(peaks,retrieve,"excsetmap_location")
+    peaks = retrieve_nifti(peaks,retrieve,"excsetmap_location")
 
     template = add_string("[SUB_FILELOCATIONKEY_SUB]","excsetmap_location",template)
     template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
