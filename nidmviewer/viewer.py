@@ -15,7 +15,7 @@ import sys
 
 
 def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,columns_to_remove=None,
-             template_choice="index",port=None,remove_scripts=None,button_text="BRAIN"):
+             template_choice="index",port=None,remove_scripts=None,button_text="BRAIN",check_empty=False):
     '''generate
     will generate a nidmviewer to run locally or to embed into webserver
     Parameters
@@ -43,7 +43,8 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         JQUERY BOOTSTRAPJS BOOTSTRAPCSS PAPAYACSS PAPAYAJS NIDMSELECTBUTTON
     button_text: str
         Text string for the button to select a brain image. Default is "BRAIN"
-
+    check_empty: boolean - check for empty images or not. Will result in error if nidm paths
+               are URLS.
     '''
 
     # Check inputs and prepare template        
@@ -101,7 +102,10 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         peaks,copy_list = generate_temp(peaks,"excsetmap_location")
 
         for exc_set_file,image_name in copy_list.iteritems():
-            empty_images[image_name] = is_empty(exc_set_file)
+            if check_empty == True:
+                empty_images[image_name] = is_empty(exc_set_file)
+            else:
+                empty_images[image_name] = 0
 
         if base_image == None:
             base_image = get_standard_brain(load=False)
@@ -121,7 +125,10 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
 
         image_files = get_images(peaks,"excsetmap_location")
         for image_file in image_files:
-            empty_images[image_file] = is_empty(image_file)
+            if check_empty == True:
+                empty_images[image_file] = is_empty(image_file)
+            else:
+                empty_images[image_file] = 0
 
         template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
