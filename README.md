@@ -16,6 +16,11 @@ Complete documentation [is available](http://nidmviewer.readthedocs.org/en/lates
 
 To install
 
+      pip install nidmviewer
+
+
+To install development version:
+
       pip install git+git://github.com/vsoch/nidmviewer.git
 
 
