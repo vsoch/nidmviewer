@@ -8,6 +8,7 @@ from nidmviewer.templates import get_template, add_string, save_template, remove
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
+import requests
 import pandas
 import numpy
 import os
@@ -202,17 +203,30 @@ def retrieve_nifti(peaks,retrieve,location_key):
     '''
     # Note: retrieve = True has not been tested!
     updated_peaks = dict()
-    for nidm,entries in peaks.iteritems():
-        if retrieve:
-            for e in range(len(entries)):
-                if location_key in entries[e]:
-                    brainmap = entries[e][location_key]
+    redirect_dict = dict()
+    for nidm,entries in peaks.iteritems(): 
+        for e in range(len(entries)):
+            if location_key in entries[e]:
+                brainmap = entries[e][location_key]
+
+                if retrieve:
                     image_ext = get_extension(brainmap)
                     temp_path = get_random_name()
                     temp_dir = tempfile.mkdtemp()
                     temp_image_path = "%s/%s.%s" %(temp_dir,temp_path,image_ext)
                     if download_file(brainmap,temp_image_path):
                         entries[e][location_key] = temp_image_path
+                else:
+                    # Look for redirected address if any 
+                    # (important for redirects from HTTP to HTTPS)
+                    if '://' in brainmap:
+                        if brainmap in redirect_dict:
+                            entries[e][location_key] = redirect_dict[brainmap]
+                        else:
+                            r = requests.get(brainmap)
+                            entries[e][location_key] = r.url
+                            redirect_dict[brainmap] = r.url
+
         updated_peaks[nidm] = entries
     return updated_peaks
 

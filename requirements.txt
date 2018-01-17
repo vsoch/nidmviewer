@@ -5,3 +5,4 @@ rdflib-jsonld
 pandas
 nibabel
 pyparsing==1.5.7
+requests
