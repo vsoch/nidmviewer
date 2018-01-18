@@ -63,7 +63,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     peaks = parse_nidm(ttl_files)
 
     # Convert coordinates from '[x,y,z]' to [x],[y],[z]
-    for nidm,peak in peaks.iteritems():
+    for nidm,peak in peaks.items():
         coordinates = parse_coordinates(peak.coordinate.tolist())
         peak = peak.drop("coordinate",axis=1)
         if coordinates.shape[0] > 0:
@@ -84,7 +84,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     column_names = remove_columns(column_names,columns)
 
     # We want pandas df in the format of dict/json strings for javascript embed
-    for nidm,peak in peaks.iteritems():
+    for nidm,peak in peaks.items():
         peaks[nidm] = to_dictionary(peak,strings=True)    
  
     # Retrieve nifti files, if necessary
@@ -101,7 +101,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     if view_in_browser==True:
         peaks,copy_list = generate_temp(peaks,"excsetmap_location")
 
-        for exc_set_file,image_name in copy_list.iteritems():
+        for exc_set_file,image_name in copy_list.items():
             if check_empty == True:
                 empty_images[image_name] = is_empty(exc_set_file)
             else:
@@ -202,7 +202,7 @@ def retrieve_nifti(peaks,retrieve,location_key):
     '''
     # Note: retrieve = True has not been tested!
     updated_peaks = dict()
-    for nidm,entries in peaks.iteritems():
+    for nidm,entries in peaks.items():
         if retrieve:
             for e in range(len(entries)):
                 if location_key in entries[e]:
@@ -219,7 +219,7 @@ def retrieve_nifti(peaks,retrieve,location_key):
 
 def get_column_names(peaks):
     column_names = dict()
-    for nidm,df in peaks.iteritems():
+    for nidm,df in peaks.items():
         column_names[nidm] = df.columns.tolist()
     return column_names
 
@@ -244,7 +244,7 @@ def generate_temp(peaks,location_key):
         images into the temporary directory with the correct names. 
     '''
     copy_list = dict()
-    for nidm,entries in peaks.iteritems():
+    for nidm,entries in peaks.items():
         nidm_directory = os.path.dirname(nidm)
         for e in range(len(entries)):
             if location_key in entries[e]:
@@ -258,7 +258,7 @@ def generate_temp(peaks,location_key):
 
     updated_peaks = dict()
 
-    for nidm,entries in peaks.iteritems():
+    for nidm,entries in peaks.items():
         nidm_directory = os.path.dirname(nidm)
         to_keep = []
         for e in range(len(entries)):
@@ -294,6 +294,6 @@ def check_inputs(ttl_files):
 
 def remove_columns(columns,columns_to_remove):
     new_columns = dict()
-    for nidm,column_names in columns.iteritems():
+    for nidm,column_names in columns.items():
         new_columns[nidm] = [x for x in column_names if x not in columns_to_remove]        
     return new_columns

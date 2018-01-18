@@ -14,7 +14,6 @@ import shutil
 import string
 import numpy
 import random
-import __init__
 import os
 
 
@@ -27,7 +26,7 @@ def strip_url(url,encode=True):
 
 # Get the directory of the package
 def get_package_dir():
-    return os.path.abspath(os.path.join(os.path.dirname(__init__.__file__)))
+    return os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
 # Make directory
 def make_dir(directory):
@@ -60,7 +59,7 @@ def download_file(src,dest):
         requester.retrieve(src, dest)
         return True
     except:
-        print "Cannot download %s" %(src)
+        print("Cannot download %s" %src)
         return False
 
 
@@ -117,7 +116,7 @@ def get_images(peaks,location_key):
     a peaks table
     '''
     image_list = []
-    for nidm,entries in peaks.iteritems():
+    for nidm,entries in peaks.items():
         nidm_directory = os.path.dirname(nidm)
         for e in range(len(entries)):
             if location_key in entries[e]:

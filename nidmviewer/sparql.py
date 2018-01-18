@@ -19,11 +19,13 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
     g.parse(ttl_file,format=rdf_format)
     result = g.query(query)   
     if result is None:
-        print "No results matching query."
+        print("No results matching query.")
     else:
-        print "Found results matching query."
+        print("Found results matching query.")
         result = result.serialize(format=serialize_format)    
         if output_df == True:
+            if isinstance(result, bytes):
+                result = result.decode('utf-8')
             result = StringIO(result)
             return DataFrame.from_csv(result,sep=",")
     return result
