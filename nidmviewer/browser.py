@@ -4,11 +4,16 @@ Functions to visualize in browser
 
 '''
 from nidmviewer.utils import make_tmp_folder
-import SimpleHTTPServer
-import SocketServer
 import webbrowser
 import shutil
 import os
+
+try:
+    import SimpleHTTPServer
+    import SocketServer
+except:
+    import http.server as SimpleHTTPServer
+    import socketserver as SocketServer
 
 '''
 View code in temporary browser!
@@ -19,14 +24,14 @@ copy_list is a dictionary,
 def view(html_snippet,copy_list,port):
     with make_tmp_folder() as tmp_dir:  
         # First copy all brain maps
-        for real_path,temp_path in copy_list.iteritems():
+        for real_path,temp_path in copy_list.items():
             real_path = os.path.abspath(real_path.replace("file://",""))
             shutil.copy(real_path,"%s/%s" %(tmp_dir,temp_path))
         # Now write template to temporary file
         tmp_file = "%s/pycompare.html" %(tmp_dir)
         # Change directory and start a web server
         os.chdir(tmp_dir)
-        print os.getcwd()
+        print(os.getcwd())
         write_file(html_snippet,tmp_file)
         tmp_file_base = os.path.basename(tmp_file)
         if port!=None:
@@ -39,12 +44,14 @@ def view(html_snippet,copy_list,port):
 '''Internal view function'''
 def internal_view(html_snippet,tmp_file):
     url = 'file://%s' %(tmp_file)
-    write_file(html_snippet,tmp_file)
+    write_file(html_snippet, tmp_file)
     webbrowser.open_new_tab(url)
     raw_input("Press Enter to finish...")
 
-def write_file(html_snippet,tmp_file):
-    html_file = open(tmp_file,'wb')
+def write_file(html_snippet, tmp_file):
+    html_file = open(tmp_file,'w')
+    if isinstance(html_snippet, bytes):
+        html_snippet = html_snippet.decode('utf-8')
     html_file.writelines(html_snippet)
     html_file.close()
 
@@ -52,7 +59,7 @@ def write_file(html_snippet,tmp_file):
 def run_webserver(port=8088,html_page="index.html"):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", port), Handler)
-    print "Serving pybraincompare at port", port
+    print("Serving nidmviewer at port %s" %port)
     webbrowser.open("http://localhost:%s/%s" %(port,html_page))
     httpd.serve_forever()
     return httpd

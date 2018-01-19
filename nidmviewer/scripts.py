@@ -26,7 +26,7 @@ def main():
         parser.print_help()
         sys.exit(0)
 
-    print "Starting up the nidmviewer!"
+    print("Starting up the nidmviewer!")
 
     nidm_files = args.ttl.split(",")
     if args.columns_to_remove != None:
@@ -39,10 +39,10 @@ def main():
         standard_brain = None
 
     httpd = generate(ttl_files=nidm_files,
-                   base_image=standard_brain,
-                   columns_to_remove=args.columns_to_remove,
-                   view_in_browser=True,
-                   port=args.port)
+                     base_image=standard_brain,
+                     columns_to_remove=args.columns_to_remove,
+                     view_in_browser=True,
+                     port=args.port)
 
 if __name__ == '__main__':
     main()
