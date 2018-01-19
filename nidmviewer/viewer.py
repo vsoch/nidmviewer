@@ -107,12 +107,12 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
             else:
                 empty_images[image_name] = 0
 
-        if base_image == None:
+        if base_image is None:
             base_image = get_standard_brain(load=False)
             dummy_peak = {base_image: [{"excsetmap_location":base_image}]}
             junk,base_copy = generate_temp(dummy_peak,"excsetmap_location")
             copy_list.update(base_copy)
-            base_image = base_copy.values()[0]
+            base_image = list(base_copy.values())[0]
         
         template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)

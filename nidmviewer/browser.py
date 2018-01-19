@@ -44,12 +44,14 @@ def view(html_snippet,copy_list,port):
 '''Internal view function'''
 def internal_view(html_snippet,tmp_file):
     url = 'file://%s' %(tmp_file)
-    write_file(html_snippet,tmp_file)
+    write_file(html_snippet, tmp_file)
     webbrowser.open_new_tab(url)
     raw_input("Press Enter to finish...")
 
-def write_file(html_snippet,tmp_file):
-    html_file = open(tmp_file,'wb')
+def write_file(html_snippet, tmp_file):
+    html_file = open(tmp_file,'w')
+    if isinstance(html_snippet, bytes):
+        html_snippet = html_snippet.decode('utf-8')
     html_file.writelines(html_snippet)
     html_file.close()
 
