@@ -9,13 +9,12 @@ import contextlib
 import tempfile
 import nibabel
 import zipfile
-import urllib
 import shutil
 import string
 import numpy
 import random
 import os
-
+import sys
 
 # Split a url to just get base
 def strip_url(url,encode=True):
@@ -55,8 +54,15 @@ def read_file_lines(file_name):
 
 def download_file(src,dest):
     try:
-        requester = urllib.FancyURLopener()
-        requester.retrieve(src, dest)
+        if sys.version_info < (3,):
+            import urllib
+            requester = urllib.FancyURLopener()
+            requester.retrieve(src, dest)
+        else:
+            import urllib.request
+            opener = urllib.request.urlopen(src)
+            with open(dest, 'wb') as fp:
+                fp.write(requester.read())
         return True
     except:
         print("Cannot download %s" %src)
