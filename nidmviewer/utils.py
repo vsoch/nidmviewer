@@ -55,7 +55,7 @@ def read_file_lines(file_name):
 
 def download_file(src,dest):
     try:
-        requester = urllib.URLopener()
+        requester = urllib.FancyURLopener()
         requester.retrieve(src, dest)
         return True
     except:
