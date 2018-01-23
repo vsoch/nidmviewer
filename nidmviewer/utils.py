@@ -62,7 +62,7 @@ def download_file(src,dest):
             import urllib.request
             opener = urllib.request.urlopen(src)
             with open(dest, 'wb') as fp:
-                fp.write(requester.read())
+                fp.write(openfer.read())
         return True
     except:
         print("Cannot download %s" %src)
