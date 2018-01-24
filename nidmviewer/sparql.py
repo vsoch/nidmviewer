@@ -1,20 +1,72 @@
+'''
+
+Copyright (c) 2014-2018, Vanessa Sochat
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+'''
+
 import rdflib
 import rdfextras
 rdfextras.registerplugins()
 import sys
+
 if sys.version_info[0] < 3:
     from StringIO import StringIO
 else:
     from io import StringIO
 from pandas import DataFrame
 
-'''
-sparql.py: part of the nidmviewer package
-Sparql queries
 
-'''
+def do_query(ttl_file, 
+             query, 
+             rdf_format="turtle",
+             serialize_format="csv",
+             output_df=True,
+             sep=','):
 
-def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df=True):
+    '''do_query is the base function to perform a query to an rdf file 
+       (ttl_file) by:
+
+        1. creating a graph from the file
+        2. query the graph with the query string
+        3. serializing a result, if obtained.
+
+        The default serializes to a csv and data frame.
+
+        Parameters
+        ==========
+        ttl_file: the rdf (turtle) file to query
+        query: the string query (sparql) to run
+        rdf_format: the format of the rdf_file to create the graph
+        serialize_format: the format to serialize the result
+        output_df: if True (default) convert the csv to a dataframe
+
+    '''
     g = rdflib.Graph()
     g.parse(ttl_file,format=rdf_format)
     result = g.query(query)   
@@ -27,8 +79,14 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
             if isinstance(result, bytes):
                 result = result.decode('utf-8')
             result = StringIO(result)
-            return DataFrame.from_csv(result,sep=",")
+            return DataFrame.from_csv(result,sep=sep)
     return result
+
+
+################################################################################
+# Pre-baked Queries
+################################################################################
+
 
 def get_coordinates(ttl_file):
     query = """

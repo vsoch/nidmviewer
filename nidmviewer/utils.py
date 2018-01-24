@@ -1,10 +1,38 @@
 '''
-utils.py: part of the nidmviewer package
-Functions to work with html templates
+
+Copyright (c) 2005-2018, Vanessa Sochat
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+       copyright notice, this list of conditions and the following
+       disclaimer in the documentation and/or other materials provided
+       with the distribution.
+
+    * Neither the name of the NumPy Developers nor the names of any
+       contributors may be used to endorse or promote products derived
+       from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 '''
 
-import numpy as np
 import contextlib
 import tempfile
 import nibabel
@@ -14,14 +42,14 @@ import string
 import numpy
 import random
 import os
+import re
 import sys
 
-# Split a url to just get base
-def strip_url(url,encode=True):
-    if encode:
-        return url.split("/")[-1].encode("utf-8")
-    else:
-        return url.split("/")[-1]
+# Imports based on python 2 and 3
+try:
+    from urllib.request import urlopen
+except:
+    from urllib2 import urlopen
 
 # Get the directory of the package
 def get_package_dir():
@@ -31,11 +59,6 @@ def get_package_dir():
 def make_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
-
-# Unzip static files to temporary directory
-def unzip(source,dest_dir):
-    with zipfile.ZipFile(source, "r") as z:
-        z.extractall(dest_dir)
 
 # Make temporary directory
 @contextlib.contextmanager
@@ -85,33 +108,50 @@ def download_file(src, dest=None, download_folder=None):
         return src
 
 
+def get_redirect_url(url):
+    '''follow a redirect with a FancyUrlOpener. If it's not a url,
+       we pass and return the original file path.
+
+       Parameters
+       ==========
+       url: the path or url to follow
+
+    '''
+
+    # Local file doesn't have redirect
+    if url.startswith('file://'):
+        return re.sub('^file://','', url)
+    try:
+        url = urlopen(url).url
+    except:
+        pass
+    return url
+
+    
 # Filenames
 def get_tmpname(brainmap, temp_dir=None):
     '''get tmpname will return a temporary file name based on an input (likely
        nifti) file.
+
+       Parameters
+       ==========
+       brainmap: the path to the brainmap
+       temp_dir: a path to a temporary directory to use. If not defined,
+                 one is created on the fly.
+
     '''
     image_ext = get_extension(brainmap)
     temp_path = get_random_name()
+
+    # If temporary directory not defined, create!
     if temp_dir is None:
         temp_dir = tempfile.mkdtemp()
+
     return "%s/%s.%s" %(temp_dir,temp_path,image_ext)
 
 
-def get_name(path):
-    return os.path.split(path)[1].split(".")[0]
-
 def get_random_name(length=6,chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(length))
-
-# Generate new png paths to correspond to nifti filenames
-def make_png_paths(nifti_files):
-    image_paths = []
-    for i in range(0,len(mr_files)):
-        image = mr_files[i]
-        tmp_svg = "%s/tmpbrain%s.png" %(tmp_dir,i)
-        make_glassbrain_image(image,tmp_svg)
-        image_paths.append(tmp_svg)
-    return image_paths
 
 
 def get_extension(path):
@@ -119,25 +159,16 @@ def get_extension(path):
     fileparts.pop(0)
     return ".".join(fileparts)
 
-# Get unique values in a list of lists
-def unwrap_list_unique(list_of_lists):
-    uniques = []
-    for listy in list_of_lists:
-        uniques = uniques + [item for item in listy]
-    uniques = list(np.unique(uniques))
-    return uniques
 
 # Brain image templates
-def get_standard_brain(load=True):
-    mr_directory = get_package_dir()
-    brain = "%s/data/MNI152_T1_2mm_brain.nii.gz" %(mr_directory)
-    if load:
-        return nib.load(brain)
-    else:
-        return brain
+def get_standard_brain():
+    return "https://rawgit.com/vsoch/nidmviewer/master/nidmviewer/data/MNI152_T1_2mm_brain.nii.gz"
+
 
 # Check if nifti is empty
-def is_empty(nii_file):
+def _is_empty(nii_file):
+    '''driver function to determine if single nifti file is empty
+    '''
     nii = nibabel.load(nii_file)
     data = nii.get_data()
     data = numpy.nan_to_num(data)
@@ -145,16 +176,29 @@ def is_empty(nii_file):
         return 1
     return 0
 
-def get_images(peaks,location_key):
-    '''get_images returns unique images for a location key from
-    a peaks table
+
+def is_empty(peaks, check_empty=True, location_key='excsetmap_location'):
+    '''find empty will take a peaks lookup in form {nidm: {name: brainmap }}
+       and return a lookup dictionary with 0 if a brainmap is empty, 1 if not
+
+       Parameters
+       ==========
+       lookup: dictionary of nidm files, names, and brainmaps in format
+                form {nidm: {name: brainmap }}
+       check_empty: a 0/1 to distinguish empty (1) or not (0)
+
     '''
-    image_list = []
-    for nidm,entries in peaks.items():
-        nidm_directory = os.path.dirname(nidm)
-        for e in range(len(entries)):
-            if location_key in entries[e]:
-                brainmap = entries[e][location_key]
-                if brainmap not in image_list:
-                    image_list.append(brainmap)
-    return image_list
+    empty_images = dict()
+
+    for nidm, items in peaks.items():
+        for item in items:
+            status = 0
+            image_file = item[location_key]
+            if os.path.exists(image_file):
+                # Generate a lookup with 1 if empty, 0f not
+                if check_empty is True and image_file not in empty_images:
+                    status = _is_empty(image_file)
+
+            empty_images[image_file] = status
+
+    return empty_images

@@ -1,0 +1,181 @@
+<html>
+<!-- Nidm Viewer, for Server
+     @vsoch, Poldracklab <3 -->
+<head>
+    <title>NIDM Viewer</title>
+    <!--[TAG_JQUERY_TAG]--><script src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-2.1.4.min.js"></script>
+    <!--[TAG_BOOTSTRAPCSS_TAG]--><link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/bootstrap.min.css">
+    <!--[TAG_BOOTSTRAPJS_TAG]--><script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.min.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/script.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/table.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/scribl.min.js"></script>
+    <script src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
+    <link href="https://rawgithub.com/vsoch/nidmviewer/master/css/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://rawgithub.com/vsoch/font-brain/master/font-brain/font-brain.css" rel="stylesheet">
+    <!--[TAG_PAPAYACSS_TAG]--><link rel="stylesheet" type="text/css" href="https://rawgithub.com/vsoch/nidmviewer/master/css/papaya.css" /> <!--version=0.8&build=910-->
+    <!--[TAG_PAPAYAJS_TAG]--><script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/papaya.js"></script> <!--version=0.8&build=910,beta-->
+</head>
+
+<body>
+
+    <div class="row">
+
+            <!-- Buttons! -->
+            <div id="button_zone">
+
+                <div class="float-left-wrapper">
+
+<!-- NIDM Selection -->
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><button class="btn btn-default">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><li class="dropdown">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><a data-toggle="dropdown" class="dropdown-toggle" href="#">Select NIDM <b class="caret"></b></a>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--><ul class="dropdown-menu" id="nidm_selection">
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></ul>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></li>
+<!--[TAG_NIDMSELECTBUTTON_TAG]--></button>
+
+                    <!-- View image buttons will be appended here -->
+                    <button class="btn btn-default">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">BRAIN <i class="fb icon-sagittal"></i><b class="caret"></b></a>
+                                <ul class="dropdown-menu" id="nidm_images">
+                                </ul>
+                        </li>
+                    </button>
+
+                </div>
+
+                <div class="float-right-wrapper">
+
+                    <a href="http://www.github.com/vsoch/nidmviewer" target="_blank">
+                        <button class="btn btn-default circle"><i class="fa fa-github"></i></button>
+                    </a>
+            </div>
+        </div>
+
+
+<div class="row">
+
+    <!-- If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)-->
+    <div class="col-md-12" id="empty" style="position:relative;padding-left:300px;padding-top:70px" class="hidden">
+        <h1 style="color:white">No suprathreshold voxels</h1>
+    </div>
+
+    <!-- Left sidebar region for tables -->
+    <div id="bluetable" class="col-md-6">
+
+        <!-- Tables for nidm will be dynamically rendered here -->
+        <div class="row" id="tablerow">
+        </div>
+    </div>
+
+    <!-- Papaya viewer window -->
+    <div id="pappy" class="col-md-6">
+
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/vsoch/nidmviewer/master/js/bootstrap-table.js"></script>
+    <script type="text/javascript">
+
+     var peaks = {'/home/vanessa/Documents/Dropbox/Code/nidm/nidm-viewer/examples/fsl/nidm.ttl': [{'coordinate_id': 'http://iri.nidash.org/141714b9-efba-4b76-89c8-58e6236cb269', 'z_score': '3.94', 'z': '-17.8', 'pvalue_uncorrected': '4.07408045586e-05', 'x': '25.5', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '39.5', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0001_1'}, {'coordinate_id': 'http://iri.nidash.org/a2385c7a-fe38-46c1-8701-d4e12ff81900', 'z_score': '3.1', 'z': '-17.1', 'pvalue_uncorrected': '0.000967603213218', 'x': '3.07', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '31.7', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0001_4'}, {'coordinate_id': 'http://iri.nidash.org/5e14be97-992c-4d22-8191-a1cbc179d388', 'z_score': '6.7', 'z': '-17.1', 'pvalue_uncorrected': '1.04209973983e-11', 'x': '55.9', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '3.06', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_4'}, {'coordinate_id': 'http://iri.nidash.org/af0da9f6-7a59-4a7c-9b6a-c57522a3ecc6', 'z_score': '6.78', 'z': '-2.87', 'pvalue_uncorrected': '6.00874905388e-12', 'x': '55.4', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-13.0', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_2'}, {'coordinate_id': 'http://iri.nidash.org/353e2155-33de-48ae-a564-6a83a1a61e6a', 'z_score': '7.74', 'z': '-0.366', 'pvalue_uncorrected': '4.99600361081e-15', 'x': '-65.0', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-23.6', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_1'}, {'coordinate_id': 'http://iri.nidash.org/6a35f5a4-364e-46f8-a5b6-3f77ccf23ff0', 'z_score': '6.54', 'z': '-8.19', 'pvalue_uncorrected': '3.07593950311e-11', 'x': '-55.5', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '0.362', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_6'}, {'coordinate_id': 'http://iri.nidash.org/f46f85aa-8c21-4ffc-b866-5d5c379a3baa', 'z_score': '3.46', 'z': '-18.6', 'pvalue_uncorrected': '0.000270087693963', 'x': '39.2', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '55.4', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0001_2'}, {'coordinate_id': 'http://iri.nidash.org/88b653a0-1449-47bb-a319-9195e146f874', 'z_score': '3.43', 'z': '-17.5', 'pvalue_uncorrected': '0.000301790624609', 'x': '20.9', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '31.5', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0001_3'}, {'coordinate_id': 'http://iri.nidash.org/1ef64c0f-e103-4d8e-bfec-6f485c0fd856', 'z_score': '6.71', 'z': '6.5', 'pvalue_uncorrected': '9.73121583314e-12', 'x': '-51.9', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-31.7', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_3'}, {'coordinate_id': 'http://iri.nidash.org/e8119f57-684e-4240-b049-ead0f9ed48f3', 'z_score': '6.55', 'z': '-1.09', 'pvalue_uncorrected': '2.87685431033e-11', 'x': '-55.7', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-7.65', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0002_5'}, {'coordinate_id': 'http://iri.nidash.org/36bb1942-6957-426b-870d-83194013fea9', 'z_score': '2.91', 'z': '-10.2', 'pvalue_uncorrected': '0.00180714378081', 'x': '11.7', 'exc_set': 'http://iri.nidash.org/2f8fe688-abe9-465c-bedd-fbe50c3a5206', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '23.6', 'name': 'ExcursionSet_T002.nii.gz', 'excsetmap_location': './ExcursionSet_T002.nii.gz', 'coord_name': 'Coordinate 0001_5'}, {'coordinate_id': 'http://iri.nidash.org/13cd636c-2252-49bd-8ffc-0600adc188b6', 'z_score': '6.73', 'z': '7.64', 'pvalue_uncorrected': '8.48321413116e-12', 'x': '13.5', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-96.7', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_4'}, {'coordinate_id': 'http://iri.nidash.org/f654a391-9ab9-46dc-a156-51ae1e7bbda5', 'z_score': '7.25', 'z': '-5.73', 'pvalue_uncorrected': '2.08388861722e-13', 'x': '-8.52', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-92.4', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_1'}, {'coordinate_id': 'http://iri.nidash.org/ba5df904-7193-4765-a3a3-38320c3d6058', 'z_score': '6.26', 'z': '-5.96', 'pvalue_uncorrected': '1.92488691653e-10', 'x': '4.83', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-92.6', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_6'}, {'coordinate_id': 'http://iri.nidash.org/71ba2b8e-31a0-4027-9252-35a15906c451', 'z_score': '6.99', 'z': '8.03', 'pvalue_uncorrected': '1.37445610449e-12', 'x': '-8.72', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-96.4', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_2'}, {'coordinate_id': 'http://iri.nidash.org/62f3071d-6fb9-479e-af8c-f4b95c3d0c3a', 'z_score': '6.38', 'z': '-13.0', 'pvalue_uncorrected': '8.85440609721e-11', 'x': '-3.77', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-80.4', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_5'}, {'coordinate_id': 'http://iri.nidash.org/06543363-c9f4-4625-8c31-85493c36744d', 'z_score': '6.81', 'z': '8.27', 'pvalue_uncorrected': '4.87987428244e-12', 'x': '-30.9', 'exc_set': 'http://iri.nidash.org/59648721-73fe-42f4-92bf-8ca993fe7d03', 'statmap_type': 'http://purl.obolibrary.org/obo/STATO_0000376', 'y': '-92.1', 'name': 'ExcursionSet_T001.nii.gz', 'excsetmap_location': './ExcursionSet_T001.nii.gz', 'coord_name': 'Coordinate 0001_3'}]};
+     filename_key = "statmap";
+     location_key = "excsetmap_location";
+     var column_names = {'/home/vanessa/Documents/Dropbox/Code/nidm/nidm-viewer/examples/fsl/nidm.ttl': ['excsetmap_location', 'z_score', 'pvalue_uncorrected', 'coord_name', 'x', 'y', 'z']};
+     var empty_images = {'ExcursionSet_T002.nii.gz': 0, 'ExcursionSet_T001.nii.gz': 0};
+
+     var cx;
+     var params = [];
+     params["worldSpace"] = true;
+     params["expandable"] = false;
+     params["combineParametric"] = true;
+     params["showControls"] = false;
+     params["luts"] = [{"name":"PuBu", "data":[[0,1,0.968627,0.984314],[0.125,0.92549,0.905882,0.94902],[0.25,0.815686,0.819608,0.901961],[0.375,0.65098,0.741176,0.858824],[0.5,0.454902,0.662745,0.811765],[0.625,0.211765,0.564706,0.752941],[0.75,0.0196078,0.439216,0.690196],[0.875,0.0156863,0.352941,0.552941],[1,0.00784314,0.219608,0.345098]]},
+     {"name":"OrRd", "data":[[0,1,0.968627,0.92549],[0.125,0.996078,0.909804,0.784314],[0.25,0.992157,0.831373,0.619608],[0.375,0.992157,0.733333,0.517647],[0.5,0.988235,0.552941,0.34902],[0.625,0.937255,0.396078,0.282353],[0.75,0.843137,0.188235,0.121569],[0.875,0.701961,0,0],[1,0.498039,0,0]]}];
+     params["MNI152_T1_2mm_brain.nii.gz"] = {"parametric": true,  "min":0, "alpha":"0.75", "symmetric":true};
+     params["kioskMode"] = true;    
+
+
+// Function to add / remove image from viewer
+function viewimage(file) {
+
+     // Tag canvas, and show export button
+     $($("canvas")[0]).attr("id","papaya-canvas")
+     $("#export").show()
+
+     // Reset viewer and load new images
+     papayaContainers[0].viewer.resetViewer(0,params);
+     papayaContainers[0].toolbar.updateImageButtons();
+     papayaContainers[0].viewer.loadBaseImage(["MNI152_T1_2mm_brain.nii.gz"],true)
+     params[file] = {"parametric": true,  "min":0, "lut":"OrRd", "negative_lut":"PuBu", "alpha":"0.75", "symmetric":true};
+     setTimeout(function(){
+             papayaContainers[0].viewer.loadOverlay([file],true);
+     }, 500);
+       
+}
+
+</script>
+
+	<div class="papaya" data-params="params"></div>
+
+        <!-- View svg modal -->
+        <div class="modal" id="exportmodal">
+            <div class="modal-admin">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                        <h4 class="modal-title">Right click to Save As</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="svgexport"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+	
+        </div>
+    </div>     
+</div>
+
+
+    <script type="text/javascript">        
+            
+        $().ready(function(){
+
+	     // Generate initial table, and buttons for nidm
+	     nidm_files = []
+	     for (var nidm in peaks) {
+		 if (peaks.hasOwnProperty(nidm)) {
+		     nidm_files.push(nidm)
+                     console.log(nidm);
+                     $("#nidm_selection").append("<li><a href='#' onclick=load_nidm(\""+ nidm +"\")>" + nidm + "</a></li>") //[TAG_NIDMSELECTBUTTON_TAG]
+		 }
+	     }
+
+             // Load first nidm into viewer
+             nidm = nidm_files[0]
+             load_nidm(nidm)
+             $('.dropdown-toggle').dropdown()
+
+         });
+
+       
+    </script>
+
+<script>
+$(function () {
+    $(".search").css("width","160px")
+    $('button[name=toggle]').css("height","40px")
+    $("#export").hide()
+    $("#export").css("margin-left",30)
+});
+</script>
+<!--[TAG_ROBOTOFONT_TAG]--><link href="http://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet" type="text/css">
+<!--[TAG_ALLSTYLE_TAG]--><link href="https://rawgithub.com/vsoch/nidmviewer/master/css/style.css" rel="stylesheet" type="text/css">
+</body></html>
+
