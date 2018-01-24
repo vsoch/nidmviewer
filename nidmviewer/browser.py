@@ -1,7 +1,5 @@
 '''
 
-BSD 3-Clause License
-
 Copyright (c) 2014-2018, Vanessa Sochat
 All rights reserved.
 
