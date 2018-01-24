@@ -2,14 +2,29 @@
 viewer.py: part of the nidmviewer package
 
 '''
-from nidmviewer.utils import strip_url, get_random_name, get_extension, \
- download_file, get_standard_brain, is_empty, get_images
-from nidmviewer.templates import get_template, add_string, save_template, remove_resources
+from nidmviewer.utils import (
+    download_file,
+    get_images,
+    get_standard_brain, 
+    get_tmpname, 
+    is_empty,
+    strip_url
+)
+
+from nidmviewer.templates import (
+    add_string,
+    get_template,
+    remove_resources,
+    save_template,
+)
+
 from nidmviewer.sparql import get_coordinates_and_maps
 from nidmviewer.convert import parse_coordinates
 from nidmviewer.browser import view
+
 import pandas
 import numpy
+import tempfile
 import os
 import sys
 
@@ -51,7 +66,7 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
     ttl_files = check_inputs(ttl_files)
     template = get_template(template_choice)  
 
-    if remove_scripts != None:
+    if remove_scripts is not None:
         if isinstance(remove_scripts,str):
             remove_scripts = [remove_scripts]
         template = template.split("\n")
@@ -88,31 +103,38 @@ def generate(ttl_files,base_image=None,retrieve=False,view_in_browser=False,colu
         peaks[nidm] = to_dictionary(peak,strings=True)    
  
     # Retrieve nifti files, if necessary
-    peaks = retrieve_nifti(peaks,retrieve,"excsetmap_location")
+    peaks = retrieve_nifti(peaks, retrieve, "excsetmap_location")
 
     template = add_string("[SUB_FILELOCATIONKEY_SUB]","excsetmap_location",template)
     template = add_string("[SUB_FILENAMEKEY_SUB]","statmap",template)
     template = add_string("[SUB_COLUMNS_SUB]",str(column_names),template)
     template = add_string("[SUB_BUTTONTEXT_SUB]",button_text,template)
 
-    # If excursion set is empty (regardless of peaks listed in the .ttl file) show "No suprathreshold voxels" instead of the table and the nifiti viewer. (this will happen if the analysis did not return any statistically significant results)
+    # If excursion set is empty (regardless of peaks listed in the .ttl file) 
+    # show "No suprathreshold voxels" instead of the table and nifiti viewer
+    # (this will happen if the analysis did not return any 
+    # statistically significant results)
     empty_images = dict()
 
-    if view_in_browser==True:
-        peaks,copy_list = generate_temp(peaks,"excsetmap_location")
+    if view_in_browser is True:
 
-        for exc_set_file,image_name in copy_list.items():
-            if check_empty == True:
-                empty_images[image_name] = is_empty(exc_set_file)
-            else:
-                empty_images[image_name] = 0
+        peaks, copy_list = generate_temp(peaks, "excsetmap_location")
+
+        # copy_list
+        # {'/full/path/tests/nidm.ttl': ['/tmp/tmp78fjnh8m/E0WFIL.nii.gz']}
+
+        for ttl_file, images in copy_list.items():
+
+            for image_name in images:
+                # Generate a lookup with 1 if empty, 0 if not
+                if check_empty is True:
+                    empty_images[image_name] = is_empty(exc_set_file)
+                else:
+                    empty_images[image_name] = 0
 
         if base_image is None:
             base_image = get_standard_brain(load=False)
-            dummy_peak = {base_image: [{"excsetmap_location":base_image}]}
-            junk,base_copy = generate_temp(dummy_peak,"excsetmap_location")
-            copy_list.update(base_copy)
-            base_image = list(base_copy.values())[0]
+            copy_list[base_image] = [base_image]
         
         template = add_string("[SUB_EMPTY_SUB]",str(empty_images),template)
         template = add_string("[SUB_PEAKS_SUB]",str(peaks),template)
@@ -185,7 +207,7 @@ def to_dictionary(df,orient="records",strip_columns=False,strings=False):
         return df.to_dict(orient=orient)
 
 
-def retrieve_nifti(peaks,retrieve,location_key):
+def retrieve_nifti(peaks, retrieve, location_key, download_folder=None):
     '''retrieve_nifti
     Download the image to a temporary folder if the user needs to
     retrieve it. Otherwise, return file
@@ -200,19 +222,33 @@ def retrieve_nifti(peaks,retrieve,location_key):
     location_key: str
         key to look up file name in peaks dictionary
     '''
-    # Note: retrieve = True has not been tested!
     updated_peaks = dict()
+
+    # Keep track of those we have downloaded
+    seen = dict()
     for nidm,entries in peaks.items():
         if retrieve:
+
+            # Ensure images downloaded to same folder
+            if download_folder is None:
+                download_folder = tempfile.mkdtemp()
+
             for e in range(len(entries)):
                 if location_key in entries[e]:
                     brainmap = entries[e][location_key]
-                    image_ext = get_extension(brainmap)
-                    temp_path = get_random_name()
-                    temp_dir = tempfile.mkdtemp()
-                    temp_image_path = "%s/%s.%s" %(temp_dir,temp_path,image_ext)
-                    if download_file(brainmap,temp_image_path):
-                        entries[e][location_key] = temp_image_path
+
+                    # We haven't seen it yet
+                    if brainmap in seen:
+                        entries[e][location_key] = seen[brainmap]
+                    else:
+                        # Return successful download OR original path
+                        download_path = download_file(src=brainmap, 
+                                                      download_folder=download_folder)
+
+                        entries[e][location_key] = download_path
+                        seen[brainmap] = download_path
+
+
         updated_peaks[nidm] = entries
     return updated_peaks
 
@@ -224,7 +260,7 @@ def get_column_names(peaks):
     return column_names
 
 
-def generate_temp(peaks,location_key):
+def generate_temp(peaks, location_key):
     '''generate_temp
     generate a lookup of temporary files
     Parameters
@@ -243,32 +279,29 @@ def generate_temp(peaks,location_key):
         fullpath in new_nifti_files[ttl_file] dictionary. This is used to copy
         images into the temporary directory with the correct names. 
     '''
-    copy_list = dict()
-    for nidm,entries in peaks.items():
-        nidm_directory = os.path.dirname(nidm)
-        for e in range(len(entries)):
-            if location_key in entries[e]:
-                brainmap = entries[e][location_key]
-                brainmap_base = os.path.basename(brainmap)
-                if "%s/%s" %(nidm_directory,brainmap_base) not in copy_list:
-                    image_ext = get_extension(brainmap)
-                    temp_path = get_random_name()
-                    temp_image_path = "%s.%s" %(temp_path,image_ext)
-                    copy_list["%s/%s" %(nidm_directory,brainmap_base)] = temp_image_path
 
+    # prepare to copy files we have locally
     updated_peaks = dict()
+    copy_list = dict()      # brainmap lookup, list with index nidm ttl
 
     for nidm,entries in peaks.items():
-        nidm_directory = os.path.dirname(nidm)
+
+        # index to coordinates to keep
         to_keep = []
+        if nidm not in copy_list:
+            copy_list[nidm] = []
+
         for e in range(len(entries)):
+
             if location_key in entries[e]:
                 brainmap = entries[e][location_key]
-                brainmap_base = os.path.basename(brainmap)
-                entries[e][location_key] = copy_list["%s/%s" %(nidm_directory,brainmap_base)]
                 if "x" in entries[e]:
                     if entries[e]["x"] != "nan":
                         to_keep.append(e)
+                        
+                        # We found a coordinate! Keep the map around
+                        if brainmap not in copy_list[nidm]:
+                            copy_list[nidm].append(brainmap)
 
         # Remove coordinates that are nan from the data frame
         entries = [entries[e] for e in range(len(entries)) if e in to_keep]

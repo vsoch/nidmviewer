@@ -27,6 +27,7 @@ setup(
     description="command line or server tool to view or compare nidm results.",
     keywords='nidm nidm-results brain imaging neuroimaging',
 
+    # python -m pip install requirements.txt
     install_requires = ['numpy','rdflib','rdfextras','rdflib-jsonld','pandas', 'nibabel', 'pyparsing'],
 
     entry_points = {

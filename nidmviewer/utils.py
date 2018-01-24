@@ -52,7 +52,23 @@ def read_file_lines(file_name):
     return file_contents
 
 
-def download_file(src,dest):
+def download_file(src, dest=None, download_folder=None):
+    '''download file will return a downloaded temporary path specified, or
+       if not possible, return the original source path with a warning.
+ 
+       Parameters
+       ==========
+       src: the source path to download
+       dest: the destination path to download to. If not set, creates temporary
+             directory. The user can either provide a complete destination path,
+             (dest) or a download folder (and have a dest generated with it)
+
+    '''
+
+    # if the dest not provided, return randomly generated based on folder
+    if dest is None:
+        dest = get_tmpname(src, download_folder)
+
     try:
         if sys.version_info < (3,):
             import urllib
@@ -63,13 +79,24 @@ def download_file(src,dest):
             opener = urllib.request.urlopen(src)
             with open(dest, 'wb') as fp:
                 fp.write(opener.read())
-        return True
+        return dest
     except:
         print("Cannot download %s" %src)
-        return False
+        return src
 
 
 # Filenames
+def get_tmpname(brainmap, temp_dir=None):
+    '''get tmpname will return a temporary file name based on an input (likely
+       nifti) file.
+    '''
+    image_ext = get_extension(brainmap)
+    temp_path = get_random_name()
+    if temp_dir is None:
+        temp_dir = tempfile.mkdtemp()
+    return "%s/%s.%s" %(temp_dir,temp_path,image_ext)
+
+
 def get_name(path):
     return os.path.split(path)[1].split(".")[0]
 
@@ -85,6 +112,7 @@ def make_png_paths(nifti_files):
         make_glassbrain_image(image,tmp_svg)
         image_paths.append(tmp_svg)
     return image_paths
+
 
 def get_extension(path):
     fileparts =  os.path.basename(path).split(".")

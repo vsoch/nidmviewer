@@ -21,18 +21,25 @@ html_snippet is the template code with images subbed
 copy_list is a dictionary, 
   with {nidm:{brainmap1_file:temp1_file,..brainmapN_file:tempN_file}}
 '''
-def view(html_snippet,copy_list,port):
+def view(html_snippet, copy_list, port):
+
     with make_tmp_folder() as tmp_dir:  
+
         # First copy all brain maps
-        for real_path,temp_path in copy_list.items():
-            real_path = os.path.abspath(real_path.replace("file://",""))
-            shutil.copy(real_path,"%s/%s" %(tmp_dir,temp_path))
+        for original, images in copy_list.items():
+            for image in images:
+                final_path = "%s/%s" %(tmp_dir, os.path.basename(image))
+                if not os.path.exists(final_path):
+                    shutil.copy(image, final_path)
+
         # Now write template to temporary file
         tmp_file = "%s/pycompare.html" %(tmp_dir)
+
         # Change directory and start a web server
         os.chdir(tmp_dir)
         print(os.getcwd())
-        write_file(html_snippet,tmp_file)
+        write_file(html_snippet, tmp_file)
+
         tmp_file_base = os.path.basename(tmp_file)
         if port!=None:
             httpd = run_webserver(html_page="%s" %(tmp_file_base),port=port)

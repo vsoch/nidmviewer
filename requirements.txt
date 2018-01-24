@@ -1,7 +1,7 @@
+pyparsing<=1.5.7
 numpy
-rdflib
+git+https://github.com/RDFLib/rdflib@master
 rdfextras
 rdflib-jsonld
 pandas
 nibabel
-pyparsing==1.5.7
