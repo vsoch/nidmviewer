@@ -1,4 +1,6 @@
 '''
+convert
+Functions to convert/parse output from nidm sparql queries
 
 Copyright (c) 2014-2018, Vanessa Sochat
 All rights reserved.
@@ -29,7 +31,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 '''
-
 
 import pandas 
 
@@ -63,4 +64,3 @@ def getjson(nidm_file,format="n3"):
 def prettyjson(nidm_file,format="n3"):
     g = Graph().parse(nidm_file, format=format)
     return g.serialize(format='json-ld', indent=4)
-

@@ -1,4 +1,6 @@
 '''
+sparql.py: part of the nidmviewer package
+Sparql queries
 
 Copyright (c) 2014-2018, Vanessa Sochat
 All rights reserved.
@@ -40,7 +42,6 @@ if sys.version_info[0] < 3:
 else:
     from io import StringIO
 from pandas import DataFrame
-
 
 def do_query(ttl_file, 
              query, 
