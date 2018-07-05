@@ -17,7 +17,9 @@ be released as tags on Github.
 
 ## [master](https://github.com/vsoch/nidm-viewer/tree/master) (master)
 
- - updated license to not be using another organization's, and to script headers
+ - cleaned up imports, fixed bug to follow redirects
+ - updated license to not be using another organization's :)
+ - added variable to viewer generate to specify a root folder
  - added this CHANGELOG and a list of [CONTRIBUTORS](CONTRIBUTORS.md)
 
 ## [0.1.4](https://pypi.python.org/pypi/sregistry/0.1.4) (0.1.4)

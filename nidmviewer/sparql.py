@@ -36,13 +36,38 @@ import rdflib
 import rdfextras
 rdfextras.registerplugins()
 import sys
+
 if sys.version_info[0] < 3:
     from StringIO import StringIO
 else:
     from io import StringIO
 from pandas import DataFrame
 
-def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df=True):
+def do_query(ttl_file, 
+             query, 
+             rdf_format="turtle",
+             serialize_format="csv",
+             output_df=True,
+             sep=','):
+
+    '''do_query is the base function to perform a query to an rdf file 
+       (ttl_file) by:
+
+        1. creating a graph from the file
+        2. query the graph with the query string
+        3. serializing a result, if obtained.
+
+        The default serializes to a csv and data frame.
+
+        Parameters
+        ==========
+        ttl_file: the rdf (turtle) file to query
+        query: the string query (sparql) to run
+        rdf_format: the format of the rdf_file to create the graph
+        serialize_format: the format to serialize the result
+        output_df: if True (default) convert the csv to a dataframe
+
+    '''
     g = rdflib.Graph()
     g.parse(ttl_file,format=rdf_format)
     result = g.query(query)   
@@ -55,8 +80,14 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
             if isinstance(result, bytes):
                 result = result.decode('utf-8')
             result = StringIO(result)
-            return DataFrame.from_csv(result,sep=",")
+            return DataFrame.from_csv(result,sep=sep)
     return result
+
+
+################################################################################
+# Pre-baked Queries
+################################################################################
+
 
 def get_coordinates(ttl_file):
     query = """

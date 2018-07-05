@@ -1,4 +1,4 @@
-"""
+'''
 convert
 Functions to convert/parse output from nidm sparql queries
 
@@ -30,10 +30,8 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
+'''
 
-from nidmviewer.utils import read_file_lines
-from numpy import isnan, float64
 import pandas 
 
 def parse_coordinates(coordinates):
@@ -66,4 +64,3 @@ def getjson(nidm_file,format="n3"):
 def prettyjson(nidm_file,format="n3"):
     g = Graph().parse(nidm_file, format=format)
     return g.serialize(format='json-ld', indent=4)
-
